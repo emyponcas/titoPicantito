@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Tito Picantito{% endblock %}</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/icon-tito-picantito.ico' %}">
+</head>
+<body>
+    <!-- Navbar común -->
+    <nav class="nav-bar">
+        <div class="logo-tito">
+            <img src="{% static 'img/tito-picantito-logo-texto-lateral-removebg-preview.png' %}">
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="botones-navbar">
+            <a class="boton-navbar" href="{% url 'home' %}">Inicio</a>
+            <a class="boton-navbar" href="{% url 'carta' %}">Carta</a>
+            <a class="boton-navbar" href="{% url 'conocenos' %}">Conoce a Tito</a>
+            <a class="boton-navbar-filled">Pedir</a>
+            <a class="boton-navbar-filled">Uber Eats</a>
+            <a class="boton-navbar">
+                <img src="{% static 'img/icon-usuario-white.png' %}">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Bloque de contenido que cambia -->
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        function toggleMenu() {
+            document.querySelector(".botones-navbar").classList.toggle("show");
+        }
+    </script>
+    <!-- AOS animaciones de scroll-->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+
+</body>
+</html>

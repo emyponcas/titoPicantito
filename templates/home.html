@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home | Restaurante Tito Picantito{% endblock %}
+
+{% block content %}
+    <div id="video-tito" class="video-container">
+        <video autoplay muted loop disablepictureinpicture>
+            <source src="{% static 'img/video-expositor-titopicantito.mp4' %}" type="video/mp4">
+            Tu navegador no soporta la reproducción de videos.
+        </video>
+        <div class="video-texto">Atrévete a probar el fuego.</div>
+    </div>
+    <!--DESHABILITA EL CLIC DEREHCO PARA EL VIDEO-->
+    <script>
+        const video = document.getElementById('video-tito');
+        video.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // Bloquea el clic derecho
+        });
+    </script>
+    
+
+    <div class="expositor-platos">
+        <div class="plato">
+          <div class="plato-img-container">
+            <img src="{% static 'img/alitas2-img.png' %}" alt="Nombre del plato">
+            <div class="plato-info">
+              <h3>Alas al infierno</h3>
+              <p>Un viaje al inframundo</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="plato">
+          <div class="plato-img-container">
+            <img src="{% static 'img/margarita-img.png' %}" alt="Nombre del plato">
+            <div class="plato-info">
+              <h3>Tita Margarita</h3>
+              <p>El cariño de la abuela... ¡con un toque de tequila!</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="plato">
+          <div class="plato-img-container">
+            <img src="{% static 'img/hamburguesa-img.png' %}" alt="Nombre del plato">
+            <div class="plato-info">
+              <h3>Hamburguesa Diablo</h3>
+              <p>Carne 100% vacuno, cheddar, pan brioche y cuernos del diablo</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="plato">
+          <div class="plato-img-container">
+            <img src="{% static 'img/queso.png' %}" alt="Nombre del plato">
+            <div class="plato-info">
+              <h3>Tortelloni Peperoni</h3>
+              <p>El carácter del peperoni en cada tortelloni.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    
+    <div class="footer-comida">
+        <h1>Consuma bajo su propio riesgo</h1>
+        <h2>Este menú es solo para amantes del picante</h2>
+        <h3>Ver Carta</h3>
+    </div>
+{% endblock %}

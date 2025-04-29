@@ -1,0 +1,423 @@
+/* Importación de fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+/* Estilos globales del body */
+body {
+    background-color: #000000;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+    color: black;
+    margin: 0;
+    font-family: "Bebas Neue", sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos de la barra de navegación */
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: black;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+.logo-tito img {
+    width: 150px;
+    height: auto;
+}
+
+.botones-navbar {
+    display: flex;
+    align-items: center;
+}
+
+.botones-navbar a {
+    text-decoration: none;
+}
+
+.boton-navbar {
+    color: white;
+    padding: 8px 10px;
+    margin: 0px 8px;
+    cursor: pointer;
+    transition: color 0.5s;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.boton-navbar:hover {
+    color: green;
+}
+
+.boton-navbar img {
+    width: 30px;
+    transition: 0.5s;
+}
+
+.boton-navbar img:hover {
+    color: green;
+}
+
+.boton-navbar-filled {
+    color: white;
+    background-color: green;
+    padding: 8px 10px;
+    margin: 0px 8px;
+    transition: background-color 0.5s;
+    cursor: pointer;
+}
+
+.boton-navbar-filled:hover {
+    background-color: #01aa01;
+}
+
+/* Estilos del contenedor del video */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#video-tito {
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Estilos de los textos del video */
+.video-texto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 75px;
+    font-weight: bold;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 1.5);
+    text-align: center;
+}
+
+/* Estilos del expositor de platos */
+.expositor-platos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 5%;
+}
+
+.plato {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.plato-img-container {
+    position: relative;
+    border-radius: 3px;
+}
+
+.plato img {
+    width: 275px;
+    display: block;
+    transition: transform 0.4s ease;
+    z-index: 1;
+    cursor: pointer;
+    border: 0.1px solid white; /* bordes invisibles por defecto */
+    border-radius: 3px; /* redondeo de borde */
+    transition: all 0.4s ease; /* transición suave */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* sombra suave */
+}
+
+.plato:hover img {
+    border: 0.5px solid #00ff00;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); /* glow verde */
+    transform: scale(1.02); /* un poco de zoom */
+}
+
+.plato-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 10px;
+    color: white;
+    text-align: center;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index: 2;
+}
+
+.plato-img-container:hover .plato-info {
+    opacity: 1;
+    visibility: visible;
+}
+
+.plato-info h3 {
+    font-size: 26px;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+.plato-info p {
+    font-size: 16px;
+    margin: 5px 0 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+/* Estilos del pie de la página con comida */
+.footer-comida {
+    background-image: url("/static/img/footer-comida-img.jpg");
+    background-repeat: no-repeat;
+    text-align: center;
+    background-size: cover;
+}
+
+.footer-comida h1 {
+    font-size: 100px;
+    color: white;
+    margin-bottom: -2%;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 1.5);
+}
+
+.footer-comida h2 {
+    font-size: 30px;
+    color: white;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 1.5);
+}
+
+.footer-comida h3 {
+    color: white;
+    padding: 30px;
+    background-color: rgb(164, 180, 101);
+    margin-left: 40%;
+    margin-right: 40%;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 1.5);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .botones-navbar {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .botones-navbar.show {
+        display: flex;
+    }
+
+    .conocenos-logo-animado {
+        width: 250px;  /* logo más grande en pantallas pequeñas */
+        height: auto;
+        animation: mover-logo-globo 10s ease-in-out infinite; /* animación más lenta */
+    }
+
+    .conocenos-content {
+        flex-direction: column;
+        align-items: center;
+        margin: 0 10px;
+    }
+
+    .conocenos-texto h1 {
+        font-size: 40px;
+    }
+
+    .conocenos-texto p {
+        font-size: 18px;
+    }
+
+    .conocenos-section {
+        padding-top: 120px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+/* Ajustes para tamaños de pantalla más pequeños */
+@media (max-width: 610px){
+    .plato img{
+        width: 250px;
+    }
+}
+
+@media (max-width: 550px){
+    .plato img{
+        width: 375px;
+    }
+}
+
+@media (max-width: 425px){
+    .plato img{
+        width: 275px;
+    }
+}
+
+/* Estilos de la sección "Conócenos" */
+.conocenos-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 120px;
+    padding-bottom: 30px;
+    overflow: hidden;
+}
+
+/* Capa de overlay para la sección "Conócenos" */
+.conocenos-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contenedor principal de la sección con imagen y texto */
+.conocenos-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    gap: 40px;
+    margin: 0 20px;
+}
+
+/* Estilos de la imagen del restaurante */
+.conocenos-img img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+    animation: aparecerImagen 1.5s ease forwards;
+}
+
+/* Estilos del texto de bienvenida */
+.conocenos-texto {
+    max-width: 600px;
+    text-align: center;
+    animation: aparecerTexto 2s ease forwards;
+}
+
+.conocenos-texto h1 {
+    font-size: 60px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.conocenos-texto p {
+    font-size: 22px;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* Animaciones de entrada */
+@keyframes aparecerImagen {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes aparecerTexto {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Estilos responsivos adicionales */
+@media (max-width: 768px) {
+    .conocenos-image-text-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .conocenos-restaurant-image {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .conocenos-text-container {
+        width: 80%;
+        text-align: center;
+    }
+}
+
+/* Estilos del logo animado */
+.conocenos-logo-container {
+    position: relative;
+    margin-top: 100px;
+}
+
+.conocenos-logo-animado {
+    width: 400px; /* Más grande */
+    height: auto;
+    animation: mover-logo-globo 10s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3)); /* Sombra flotante */
+}
+
+/* Animación del logo */
+@keyframes mover-logo-globo {
+    0% {
+        transform: translate(-20px, -20px) rotate(-3deg) scale(1);
+    }
+    25% {
+        transform: translate(20px, -10px) rotate(2deg) scale(1.05);
+    }
+    50% {
+        transform: translate(20px, 20px) rotate(-2deg) scale(1);
+    }
+    75% {
+        transform: translate(-10px, 20px) rotate(3deg) scale(1.05);
+    }
+    100% {
+        transform: translate(-20px, -20px) rotate(-3deg) scale(1);
+    }
+}
+
+
+
+
+/* CARTA CSS */
+

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Conócenos | Restaurante Tito Picantito{% endblock %}
+
+{% block content %}
+<section class="conocenos-section">
+
+  <div class="conocenos-overlay">
+    <div class="conocenos-content">
+      
+      <div class="conocenos-img">
+        <img src="{% static 'img/imagen-restaurante.png' %}" alt="Nuestro Restaurante">
+      </div>
+
+      <div class="conocenos-texto">
+        <h1>Bienvenido a Nuestro Hogar</h1>
+        <p>
+          Desde nuestras raíces humildes hasta la pasión que ponemos en cada plato, queremos contarte nuestra historia.
+        </p>
+      </div>
+    </div>
+      
+    <div class="conocenos-logo-container">
+                <img src="{% static 'img/logo-con-combra-para-animacion.png' %}" alt="Logo" class="conocenos-logo-animado">
+    </div>
+  </div>
+
+
+</section>
+{% endblock %}
