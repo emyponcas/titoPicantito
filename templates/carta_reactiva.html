@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        body {
+            background-color: #C1CFA1;
+            background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-dark.png");
+            }
+    </style>
+    
+<div class="menu-container">
+    <!-- Hero Section -->
+    <section class="menu-hero">
+        <div class="hero-overlay">
+            <h1 class="restaurant-title">TITO <span>PICANTITO</span></h1>
+            <p class="restaurant-slogan">Donde cada bocado es una aventura</p>
+        </div>
+    </section>
+
+    <!-- Menu Sections -->
+    <div class="menu-sections">
+        <!-- PARA PICAR Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('para-picar')">
+                <h2>PARA PICAR 🔥<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Aperitivos para abrir el apetito</p>
+            </button>
+            <div id="para-picar" class="category-items">
+                {% for producto in entrantes %}
+                <div class="menu-item">
+                    <div class="item-image">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <img src="{% static 'img/imagenes-comida/default.png' %}" alt="{{ producto.nombre }}">
+                        {% endif %}
+                        <span class="spicy-level">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= producto.nivel_picante %}🔥{% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="item-details">
+                        <h3>{{ producto.nombre }} <span class="item-price">{{ producto.precio }} €</span></h3>
+                        <p class="item-description">{{ producto.descripcion }}</p>
+                        <div class="allergens">
+                            {% for alergeno in producto.alergenos.all %}
+                                <span class="allergen-icon" title="{{ alergeno.nombre }}">
+                                    {% if "Gluten" in alergeno.nombre %}<i class="fas fa-bread-slice"></i>
+                                    {% elif "Lácteos" in alergeno.nombre %}<i class="fas fa-cheese"></i>
+                                    {% elif "Huevos" in alergeno.nombre %}<i class="fas fa-egg"></i>
+                                    {% elif "Frutos de cáscara" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Soja" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Apio" in alergeno.nombre %}<i class="fas fa-leaf"></i>
+                                    {% elif "Mostaza" in alergeno.nombre %}<i class="fas fa-mortar-pestle"></i>
+                                    {% elif "Sésamo" in alergeno.nombre %}<i class="fas fa-wheat-awn"></i>
+                                    {% elif "Crustáceos" in alergeno.nombre %}<i class="fas fa-shrimp"></i>
+                                    {% else %}<i class="fas fa-exclamation-triangle"></i>
+                                    {% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- LO PRINCIPALMENTE PICANTE Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('principalmente-picante')">
+                <h2>LO PRINCIPALMENTE PICANTE 🌶️<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Platos que desafiarán tu tolerancia al picante</p>
+            </button>
+            <div id="principalmente-picante" class="category-items">
+                {% for producto in principales %}
+                <div class="menu-item {% if producto.destacado %}highlight-item{% endif %}">
+                    <div class="item-image">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <img src="{% static 'img/imagenes-comida/default.png' %}" alt="{{ producto.nombre }}">
+                        {% endif %}
+                        <span class="spicy-level">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= producto.nivel_picante %}🔥{% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="item-details">
+                        <h3>{{ producto.nombre }} <span class="item-price">{{ producto.precio }} €</span></h3>
+                        <p class="item-description">{{ producto.descripcion }}</p>
+                        <div class="allergens">
+                            {% for alergeno in producto.alergenos.all %}
+                                <span class="allergen-icon" title="{{ alergeno.nombre }}">
+                                    {% if "Gluten" in alergeno.nombre %}<i class="fas fa-bread-slice"></i>
+                                    {% elif "Lácteos" in alergeno.nombre %}<i class="fas fa-cheese"></i>
+                                    {% elif "Huevos" in alergeno.nombre %}<i class="fas fa-egg"></i>
+                                    {% elif "Frutos de cáscara" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Soja" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Apio" in alergeno.nombre %}<i class="fas fa-leaf"></i>
+                                    {% elif "Mostaza" in alergeno.nombre %}<i class="fas fa-mortar-pestle"></i>
+                                    {% elif "Sésamo" in alergeno.nombre %}<i class="fas fa-wheat-awn"></i>
+                                    {% elif "Crustáceos" in alergeno.nombre %}<i class="fas fa-shrimp"></i>
+                                    {% else %}<i class="fas fa-exclamation-triangle"></i>
+                                    {% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- TRAGOS QUE MUERDEN Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('tragos-muerden')">
+                <h2>TRAGOS QUE MUERDEN 🍹<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Bebidas con carácter</p>
+            </button>
+            <div id="tragos-muerden" class="category-items">
+                {% for producto in bebidas %}
+                <div class="menu-item">
+                    <div class="item-image">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <img src="{% static 'img/imagenes-comida/default.png' %}" alt="{{ producto.nombre }}">
+                        {% endif %}
+                        <span class="spicy-level">
+                            {% if producto.nivel_picante == 0 %}🍼
+                            {% else %}
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= producto.nivel_picante %}🔥{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="item-details">
+                        <h3>{{ producto.nombre }} <span class="item-price">{{ producto.precio }} €</span></h3>
+                        <p class="item-description">{{ producto.descripcion }}</p>
+                        <div class="allergens">
+                            {% for alergeno in producto.alergenos.all %}
+                                <span class="allergen-icon" title="{{ alergeno.nombre }}">
+                                    {% if "Gluten" in alergeno.nombre %}<i class="fas fa-bread-slice"></i>
+                                    {% elif "Lácteos" in alergeno.nombre %}<i class="fas fa-cheese"></i>
+                                    {% elif "Huevos" in alergeno.nombre %}<i class="fas fa-egg"></i>
+                                    {% elif "Frutos de cáscara" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Soja" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Apio" in alergeno.nombre %}<i class="fas fa-leaf"></i>
+                                    {% elif "Mostaza" in alergeno.nombre %}<i class="fas fa-mortar-pestle"></i>
+                                    {% elif "Sésamo" in alergeno.nombre %}<i class="fas fa-wheat-awn"></i>
+                                    {% elif "Crustáceos" in alergeno.nombre %}<i class="fas fa-shrimp"></i>
+                                    {% else %}<i class="fas fa-exclamation-triangle"></i>
+                                    {% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- PECADO FINAL Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('pecado-final')">
+                <h2>PECADO FINAL 🍰<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Postres que te harán caer en la tentación</p>
+            </button>
+            <div id="pecado-final" class="category-items">
+                {% for producto in postres %}
+                <div class="menu-item">
+                    <div class="item-image">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <img src="{% static 'img/imagenes-comida/default.png' %}" alt="{{ producto.nombre }}">
+                        {% endif %}
+                        <span class="spicy-level">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= producto.nivel_picante %}🔥{% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="item-details">
+                        <h3>{{ producto.nombre }} <span class="item-price">{{ producto.precio }} €</span></h3>
+                        <p class="item-description">{{ producto.descripcion }}</p>
+                        <div class="allergens">
+                            {% for alergeno in producto.alergenos.all %}
+                                <span class="allergen-icon" title="{{ alergeno.nombre }}">
+                                    {% if "Gluten" in alergeno.nombre %}<i class="fas fa-bread-slice"></i>
+                                    {% elif "Lácteos" in alergeno.nombre %}<i class="fas fa-cheese"></i>
+                                    {% elif "Huevos" in alergeno.nombre %}<i class="fas fa-egg"></i>
+                                    {% elif "Frutos de cáscara" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Soja" in alergeno.nombre %}<i class="fas fa-seedling"></i>
+                                    {% elif "Apio" in alergeno.nombre %}<i class="fas fa-leaf"></i>
+                                    {% elif "Mostaza" in alergeno.nombre %}<i class="fas fa-mortar-pestle"></i>
+                                    {% elif "Sésamo" in alergeno.nombre %}<i class="fas fa-wheat-awn"></i>
+                                    {% elif "Crustáceos" in alergeno.nombre %}<i class="fas fa-shrimp"></i>
+                                    {% else %}<i class="fas fa-exclamation-triangle"></i>
+                                    {% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- PDF Buttons Section -->
+    <div class="pdf-buttons-container">
+        <div class="pdf-button-wrapper">
+            <a href="{% static 'pdf/carta-tito-picantito.pdf' %}" download="Carta-Tito-Picantito.pdf" class="download-btn">
+                <i class="fas fa-file-download"></i> Descargar PDF
+            </a>
+        </div>
+        <div class="pdf-button-wrapper">
+            <a href="{% static 'pdf/carta-tito-picantito.pdf' %}" target="_blank" class="download-btn">
+                <i class="fas fa-file-pdf"></i>Abrir en PDF
+            </a>
+        </div>
+    </div>
+
+    <!-- WiFi Info -->
+    <div class="wifi-info">
+        <p><i class="fas fa-wifi"></i> <strong>CLAVE WIFI:</strong> EL_PICANTE_DE_TITO</p>
+    </div>
+
+    <!-- Schedule -->
+    <div class="schedule">
+        <h3><i class="far fa-clock"></i> HORARIO</h3>
+        <p>13:30 - 17:30 | 20:30 - 00:30</p>
+    </div>
+</div>
+
+<script>
+    function toggleCategory(categoryId) {
+        const category = document.getElementById(categoryId);
+        const icon = category.previousElementSibling.querySelector('i');
+        
+        category.classList.toggle('active');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+    }
+
+    // Open first category by default
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('para-picar').classList.add('active');
+    });
+</script>
+
+{% endblock %}

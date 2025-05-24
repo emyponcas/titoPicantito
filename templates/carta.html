@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        body {
+            background-color: #C1CFA1;
+            background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-dark.png");
+            }
+    </style>
+    
+<div class="menu-container">
+    <!-- Hero Section -->
+    <section class="menu-hero">
+        <div class="hero-overlay">
+            <h1 class="restaurant-title">TITO <span>PICANTITO</span></h1>
+            <p class="restaurant-slogan">Donde cada bocado es una aventura</p>
+        </div>
+    </section>
+
+    <!-- Menu Sections -->
+    <div class="menu-sections">
+        <!-- PARA PICAR Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('para-picar')">
+                <h2>PARA PICAR 🔥<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Aperitivos para abrir el apetito</p>
+            </button>
+            <div id="para-picar" class="category-items">
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/alas-infierno.png' %}" alt="Alas al Infierno">
+                        <span class="spicy-level">🔥🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>ALAS AL INFIERNO <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Crujientes alitas bañadas en nuestra salsa más picante</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/nachos-spicy.png' %}" alt="Nachos Spicy">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>NACHOS SPICY <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Nachos con queso fundido, jalapeños y guacamole picante</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Frutos secos"><i class="fas fa-seedling"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/chiles-rellenos.png' %}" alt="T.N.T">
+                        <span class="spicy-level">🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>T.N.T ( CHILES RELLENOS ) <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Chiles jalapeños rellenos de queso crema y tocino, empanizados</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/papas-bravas.png' %}" alt="Papas bravisimas">
+                        <span class="spicy-level">🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>PAPAS BRAVISIMAS <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Patatas bravas con nuestra salsa diabla y alioli picante</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                            <span class="allergen-icon" title="Apio"><i class="fas fa-leaf"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More items... -->
+            </div>
+        </div>
+
+        <!-- LO PRINCIPALMENTE PICANTE Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('principalmente-picante')">
+                <h2>LO PRINCIPALMENTE PICANTE 🌶️<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Platos que desafiarán tu tolerancia al picante</p>
+            </button>
+            <div id="principalmente-picante" class="category-items">
+                <div class="menu-item highlight-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/spar-tacos.png' %}" alt="Spar Tacos">
+                        <span class="spicy-level">🔥🔥🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>SPAR-TACOS (TACOS PARA GLADIADORES) <span class="item-price">6 €</span></h3>
+                        <p class="item-description">Tacos rellenos de carne adobada con nuestros chiles más potentes</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Soja"><i class="fas fa-seedling"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/hamburguesa-diablo.png' %}" alt="Hamburguesa Diablo">
+                        <span class="spicy-level">🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>HAMBURGUESA DIABLO <span class="item-price">8 €</span></h3>
+                        <p class="item-description">Carne de Angus con queso pepper jack, jalapeños y pan de chipotle</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/tortelloni-peperoni.png' %}" alt="Tortelloni peperoni">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>TORTELLONI PEPERONI <span class="item-price">7 €</span></h3>
+                        <p class="item-description">Pasta rellena de ricota con salsa de pimienta roja y chile de árbol</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/pollitos-fenix.png' %}" alt="Pollitos de Fenix">
+                        <span class="spicy-level">🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>POLLITOS DE FENIX <span class="item-price">7 €</span></h3>
+                        <p class="item-description">Brochetas de pollo marinadas en salsa de ajo y pimienta cayena</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Mostaza"><i class="fas fa-mortar-pestle"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/costillas-lava.png' %}" alt="Costillas de lava">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>COSTILLAS DE LAVA <span class="item-price">12 €</span></h3>
+                        <p class="item-description">Costillas BBQ con glaseado de miel y chipotle, acompañadas de coleslaw</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Apio"><i class="fas fa-seedling"></i></span>
+                            <span class="allergen-icon" title="Sésamo"><i class="fas fa-wheat-awn"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/birria-averno.png' %}" alt="Birria del averno">
+                        <span class="spicy-level">🔥🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>BIRRIA DEL AVERNO <span class="item-price">9 €</span></h3>
+                        <p class="item-description">Estofado de carne con chiles secos y especias ahumadas</p>
+                        <div class="allergens">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/enchiladas.png' %}" alt="Enchiladas rojas">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>ENCHILADAS ROJAS ( 4 PIEZAS ) <span class="item-price">14 €</span></h3>
+                        <p class="item-description">Tortillas rellenas bañadas en salsa de chile guajillo y ancho</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/empallamas.png' %}" alt="Empallamas">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>EMPALLAMAS <span class="item-price">6 €</span></h3>
+                        <p class="item-description">Empanadas de carne picante con ají amarillo</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/croquetas.png' %}" alt="6.6.6 Croquetas">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>6.6.6 CROQUETAS ( 6 UNIDADES ) <span class="item-price">6 €</span></h3>
+                        <p class="item-description">Croquetas de jamón con relleno de queso y jalapeño</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More items... -->
+            </div>
+        </div>
+
+        <!-- TRAGOS QUE MUERDEN Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('tragos-muerden')">
+                <h2>TRAGOS QUE MUERDEN 🍹<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Bebidas con carácter</p>
+            </button>
+            <div id="tragos-muerden" class="category-items">
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/tita-margarita.png' %}" alt="Tita Margarita">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>TITA MARGARITA <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Margarita con un toque de chile de árbol y borde de sal de gusano</p>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/limonadita.png' %}" alt="Limonadita">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>LIMONADITA DE LIMA Y JUGO DE CHILE <span class="item-price">2.5 €</span></h3>
+                        <p class="item-description">Limón, lima, menta y un toque de chile piquín</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/tequila.png' %}" alt="Tequila ardiente habanero">
+                        <span class="spicy-level">🔥🔥🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>TEQUILA ARDIENTE HABANERO <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Shot de tequila infusionado con habanero</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/michelada.png' %}" alt="Volcan">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>VOLCÁN ( MICHELADA CON CLAMATO ) <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Cerveza con salsa picante, clamato y chile en polvo</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Crustáceos"><i class="fas fa-shrimp"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/vaso-leche.png' %}" alt="Leche">
+                        <span class="spicy-level">🍼</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>LECHE ( PARA LOS COBARDES ) <span class="item-price">1 €</span></h3>
+                        <p class="item-description">Vaso de leche para apagar el fuego</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More items... -->
+            </div>
+        </div>
+
+        <!-- PECADO FINAL Section -->
+        <div class="menu-category">
+            <button class="category-header" onclick="toggleCategory('pecado-final')">
+                <h2>PECADO FINAL 🍰<i class="fas fa-chevron-down"></i></h2>
+                <p class="category-description">Postres que te harán caer en la tentación</p>
+            </button>
+            <div id="pecado-final" class="category-items">
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/flan.png' %}" alt="Flan de Cayena">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>FLAN DE CAYENA <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Clásico flan con un toque de cayena</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/brownie.png' %}" alt="Brownie Rojo">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>BROWNIE ROJO <span class="item-price">4 €</span></h3>
+                        <p class="item-description">Brownie de chocolate con chile pasilla y nueces</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                            <span class="allergen-icon" title="Frutos secos"><i class="fas fa-seedling"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/cheesecake.png' %}" alt="Chesecake">
+                        <span class="spicy-level">🔥🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>CHEESECAKE DE MARACUYÁ SORPRESA <span class="item-price">5 €</span></h3>
+                        <p class="item-description">Tarta de queso con coulis de maracuyá y relleno de jalea picante</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Gluten"><i class="fas fa-bread-slice"></i></span>
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="{% static 'img/imagenes-comida/helado-rojo.png' %}" alt="Helado Rojo">
+                        <span class="spicy-level">🔥</span>
+                    </div>
+                    <div class="item-details">
+                        <h3>HELADO ROJO ( ADIVINA EL SABOR ENTRE EL PICOR )<span class="item-price">3 €</span></h3>
+                        <p class="item-description">Helado de vainilla con salsa de frambuesa y chile piquín</p>
+                        <div class="allergens">
+                            <span class="allergen-icon" title="Lácteos"><i class="fas fa-cheese"></i></span>
+                            <span class="allergen-icon" title="Huevo"><i class="fas fa-egg"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More items... -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- PDF Buttons Section -->
+    <div class="pdf-buttons-container">
+        <div class="pdf-button-wrapper">
+            <a href="{% static 'pdf/carta-tito-picantito.pdf' %}" download="Carta-Tito-Picantito.pdf" class="download-btn">
+                <i class="fas fa-file-download"></i> Descargar PDF
+            </a>
+        </div>
+        <div class="pdf-button-wrapper">
+            <a href="{% static 'pdf/carta-tito-picantito.pdf' %}" target="_blank" class="download-btn">
+                <i class="fas fa-file-pdf"></i>Abrir en PDF
+            </a>
+        </div>
+    </div>
+
+    <!-- WiFi Info -->
+    <div class="wifi-info">
+        <p><i class="fas fa-wifi"></i> <strong>CLAVE WIFI:</strong> EL_PICANTE_DE_TITO</p>
+    </div>
+
+    <!-- Schedule -->
+    <div class="schedule">
+        <h3><i class="far fa-clock"></i> HORARIO</h3>
+        <p>13:30 - 17:30 | 20:30 - 00:30</p>
+    </div>
+</div>
+
+<script>
+    function toggleCategory(categoryId) {
+        const category = document.getElementById(categoryId);
+        const icon = category.previousElementSibling.querySelector('i');
+        
+        category.classList.toggle('active');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+    }
+
+    // Open first category by default
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('para-picar').classList.add('active');
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <style>
+        body {
+            background-color: #F8F9FA;
+            background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
+        }
+    </style>
+    
+<div class="conocenos-section" style="padding-top: 80px;">
+    <div class="conocenos-overlay">
+        <div class="conocenos-content" style="max-width: 600px;">
+            <div class="conocenos-texto">
+                <h1 style="color: green;">INICIAR SESIÓN</h1>
+                
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}">Correo electrónico</label>
+                        {{ form.username }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                        {{ form.password }}
+                    </div>
+                    
+                    <button type="submit" class="boton-login" style="width: 100%; padding: 12px; margin-top: 20px; font-size: 20px;">
+                        INGRESAR
+                    </button>
+                </form>
+                
+                <p style="margin-top: 20px; color: #444; font-size: 18px;">
+                    ¿No tienes cuenta? <a href="{% url 'registro' %}" style="color: green;">Regístrate aquí</a>
+                </p>
+                
+                <p style="margin-top: 10px; color: #444; font-size: 18px;">
+                    <a href="#" style="color: green;">¿Olvidaste tu contraseña?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Reutilizamos los mismos estilos que en registro.html */
+    .boton-login {
+        padding: 12px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: background-color 0.3s;
+    border-radius: 3px;
+    }
+    
+    .auth-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 18px;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 18px;
+        background-color: #f8f9fa;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: green;
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    
+    /* Mensajes de error */
+    .errorlist {
+        color: #e63946;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0;
+        font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .conocenos-section {
+            padding-top: 60px;
+        }
+        
+        .auth-form {
+            padding: 0 15px;
+        }
+    }
+</style>
+{% endblock %}

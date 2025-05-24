@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <style>
+        body {
+            background-color: #F8F9FA;
+            background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
+        }
+    </style>
+    
+<div class="conocenos-section" style="padding-top: 80px;">
+    <div class="conocenos-overlay">
+        <div class="conocenos-content" style="max-width: 600px;">
+            <div class="conocenos-texto">
+                <h1 style="color: green;">REGISTRO</h1>
+                
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+                        {{ form.nombre }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.apellidos.id_for_label }}">Apellidos</label>
+                        {{ form.apellidos }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.fecha_nacimiento.id_for_label }}">Fecha de Nacimiento</label>
+                        {{ form.fecha_nacimiento }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        {{ form.email }}
+                        <small class="form-help">{{ form.email.help_text }}</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
+                        {{ form.telefono }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.rol.id_for_label }}">Rol</label>
+                        {{ form.rol }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                        {{ form.password }}
+                        <small class="form-help">{{ form.password.help_text }}</small>
+                    </div>
+                    
+                    <button type="submit" class="boton-login" style="width: 100%; padding: 12px; margin-top: 20px; font-size: 20px;">
+                        REGISTRARSE
+                    </button>
+                </form>
+                
+                <p style="margin-top: 20px; color: #444; font-size: 18px;">
+                    ¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color: green;">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .boton-login {
+        padding: 12px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: background-color 0.3s;
+    border-radius: 3px;
+    }
+    
+    .auth-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 18px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 18px;
+        background-color: #f8f9fa;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: green;
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    
+    .form-help {
+        display: block;
+        margin-top: 5px;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    /* Mensajes de error */
+    .errorlist {
+        color: #e63946;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0;
+        font-size: 14px;
+    }
+    
+    /* Mensajes flash */
+    .messages {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 1000;
+        max-width: 300px;
+    }
+    
+    .alert {
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 18px;
+        animation: slideIn 0.5s forwards;
+    }
+    
+    .alert-success {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    .alert-error {
+        background-color: #f44336;
+        color: white;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .conocenos-section {
+            padding-top: 60px;
+        }
+        
+        .auth-form {
+            padding: 0 15px;
+        }
+        
+        .messages {
+            top: 60px;
+            left: 20px;
+            right: 20px;
+            max-width: none;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends 'base_camarero.html' %}
+{% load static %}
+{% block content %}
+<div class="ticket">
+    <div class="ticket-header">
+        <img src="{% static 'img/tito-picantito-logo-texto-lateral-removebg-preview.png' %}" alt="Titopicantito" class="ticket-logo">
+        <h2>Titopicantito</h2>
+        <p>Calle Calatrava, 41002, Sevilla</p>
+        <p>Tel: +34 654 12 12 43 | NIF: B12345678</p>
+        <p class="fecha">{{ fecha|date:"d/m/Y H:i" }}</p>
+    </div>
+    
+    <div class="ticket-body">
+        <div class="ticket-info">
+            <div class="info-row">
+                <div class="info-col">
+                    <p><strong>Ticket #{{ pedido.id }}</strong></p>
+                    <p>Mesa: {{ pedido.mesa.numero }}</p>
+                </div>
+                <div class="info-col text-right">
+                    <p>Camarero: {{ pedido.camarero.nombre }}</p>
+                    <p>Comensales: {{ pedido.num_comensales }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <table class="ticket-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-right">Cant.</th>
+                    <th class="text-right">P. Unit.</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for linea in pedido.lineas_pedido.all %}
+                <tr>
+                    <td>{{ linea.producto.nombre }}</td>
+                    <td class="text-right">{{ linea.cantidad }}</td>
+                    <td class="text-right">{{ linea.precio_unidad }} €</td>
+                    <td class="text-right">{{ linea.subtotal }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <th colspan="3" class="text-right">Total:</th>
+                    <th class="text-right">{{ pedido.total }} €</th>
+                </tr>
+                {% if pedido.num_comensales > 1 %}
+                <tr class="total-persona">
+                    <th colspan="3" class="text-right">Por persona ({{ pedido.num_comensales }}):</th>
+                    <th class="text-right">{{ pedido.total_por_persona|floatformat:2 }} €</th>
+                </tr>
+                {% endif %}
+            </tfoot>
+        </table>
+        
+        {% if pedido.notas %}
+        <div class="ticket-notas">
+            <p><strong>Notas:</strong> {{ pedido.notas }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="ticket-footer">
+        <p>¡Gracias por su visita!</p>
+        <p class="iva">IVA incluido</p>
+    </div>
+    
+    <div class="ticket-actions">
+        <button onclick="window.print()" class="btn-print">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <a href="{% url 'gestion_mesas' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver a Mesas
+        </a>
+    </div>
+</div>
+
+<style>
+    .ticket {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #00a800;
+        border-radius: 8px;
+        padding: 30px;
+    }
+    
+    .ticket-header {
+        text-align: center;
+        border-bottom: 2px solid #00a800;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .ticket-header h2 {
+        color: #00a800;
+        font-size: 28px;
+        margin: 10px 0;
+    }
+    
+    .ticket-header p {
+        margin: 5px 0;
+        color: #ffffff;
+    }
+    
+    .fecha {
+        color: #aaaaaa;
+        font-size: 14px;
+    }
+    
+    .ticket-logo {
+        max-width: 150px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+    .ticket-info {
+        margin-bottom: 20px;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    
+    .info-col {
+        width: 48%;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    .ticket-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    .ticket-table th {
+        border-bottom: 1px solid #00a800;
+        padding: 8px 0;
+        text-align: left;
+        color: #ffffff;
+    }
+    
+    .ticket-table td {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        color: #ffffff;
+    }
+    
+    .total-row th {
+        font-weight: bold;
+        border-top: 2px solid #00a800;
+        padding-top: 10px;
+        color: #ffffff;
+    }
+    
+    .total-persona th {
+        color: #aaaaaa;
+    }
+    
+    .ticket-notas {
+        background-color: rgba(0, 100, 0, 0.2);
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 3px solid #00a800;
+        margin: 15px 0;
+        color: #ffffff;
+    }
+    
+    .ticket-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #ffffff;
+    }
+    
+    .iva {
+        color: #aaaaaa;
+        font-size: 14px;
+    }
+    
+    .ticket-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .btn-print, .btn-back {
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.3s;
+        color: white;
+    }
+    
+    .btn-print {
+        background-color: #00a800;
+    }
+    
+    .btn-print:hover {
+        background-color: #008000;
+    }
+    
+    .btn-back {
+        background-color: #333333;
+    }
+    
+    .btn-back:hover {
+        background-color: #444444;
+    }
+    
+    @media print {
+        body {
+            background: none;
+        }
+        
+        .ticket {
+            max-width: 100%;
+            border: none;
+            padding: 0;
+        }
+        
+        .ticket-actions {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .ticket {
+            padding: 20px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .ticket {
+            padding: 15px;
+        }
+        
+        .ticket-header h2 {
+            font-size: 24px;
+        }
+        
+        .ticket-logo {
+            max-width: 120px;
+        }
+        
+        .info-row {
+            flex-direction: column;
+        }
+        
+        .info-col {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="historial-container">
+    <div class="historial-header">
+        <h1 class="historial-title">Historial de Cocina</h1>
+        <div class="historial-actions">
+            <a href="{% url 'vista_cocina' %}" class="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver a Pedidos
+            </a>
+        </div>
+    </div>
+    
+    <div class="historial-table-container">
+        <table class="historial-table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cliente/Mesa</th>
+                    <th>Hora Pedido</th>
+                    <th>Estado</th>
+                    <th>Productos (Unidades)</th>
+                    <th>Tiempo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr class="pedido-{{ pedido.tipo }}">
+                    <td>
+                        <span class="badge-tipo {{ pedido.tipo }}">
+                            {% if pedido.tipo == 'mesa' %}
+                                <i class="fas fa-utensils"></i> Mesa
+                            {% else %}
+                                <i class="fas fa-laptop"></i> Online
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {{ pedido.cliente }}
+                        {% if pedido.comensales %}
+                            <br><small>{{ pedido.comensales }} comensales</small>
+                        {% endif %}
+                    </td>
+                    <td>{{ pedido.fecha|time }}</td>
+                    <td>
+                        <span class="estado estado-{{ pedido.estado|lower|cut:' ' }}">
+                            {% if pedido.estado == 'PENDIENTE' %}
+                                Pendiente
+                            {% elif pedido.estado == 'EN_PREPARACION' %}
+                                En preparación
+                            {% elif pedido.estado == 'SERVIDO' %}
+                                Servido
+                            {% elif pedido.estado == 'CERRADO' %}
+                                Cerrado
+                            {% elif pedido.estado == 'LISTO' %}
+                                Listo para recoger
+                            {% else %}
+                                {{ pedido.estado }}
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>{{ pedido.productos }} ({{ pedido.unidades }})</td>
+                    <td>
+                        {% if pedido.tipo == 'mesa' and pedido.fecha_cierre %}
+                            {{ pedido.fecha|timesince:pedido.fecha_cierre }}
+                        {% elif pedido.tipo == 'online' and pedido.estado == 'LISTO' %}
+                            Listo
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-message">
+                        <i class="fas fa-inbox"></i> No hay pedidos en el historial reciente
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Estilos base */
+    .historial-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        font-family: 'Bebas Neue', sans-serif;
+    }
+    
+    /* Header */
+    .historial-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid green;
+    }
+    
+    .historial-title {
+        font-size: 2.5rem;
+        color: #000;
+        margin: 0;
+        letter-spacing: 1px;
+    }
+    
+    /* Botones */
+    .btn-volver {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        background-color: #333;
+        color: white;
+        border-radius: 4px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-volver:hover {
+        background-color: #555;
+        transform: translateY(-2px);
+    }
+    
+    /* Tabla */
+    .historial-table-container {
+        overflow-x: auto;
+    }
+    
+    .historial-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .historial-table th {
+        background-color: black;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+    }
+    
+    .historial-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .historial-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .historial-table tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Badges y estados */
+    .badge-tipo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+    
+    .badge-tipo.mesa {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .badge-tipo.online {
+        background-color: #e74c3c;
+        color: white;
+    }
+    
+    .estado {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+    
+    .estado-pendiente {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .estado-en_preparacion {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+    
+    .estado-servido, .estado-listo {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .estado-cerrado {
+        background-color: #f8f9fa;
+        color: #6c757d;
+    }
+    
+    /* Mensaje vacío */
+    .empty-message {
+        text-align: center;
+        padding: 2rem;
+        color: #777;
+    }
+    
+    .empty-message i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .historial-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .historial-title {
+            font-size: 2rem;
+        }
+        
+        .btn-volver {
+            width: 100%;
+        }
+        
+        .historial-table th, 
+        .historial-table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.9rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .historial-table {
+            display: block;
+        }
+        
+        .badge-tipo {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+        }
+        
+        .estado {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+        }
+    }
+</style>
+{% endblock %}

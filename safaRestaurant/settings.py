@@ -78,10 +78,15 @@ WSGI_APPLICATION = 'safaRestaurant.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'XE',
+        'USER': 'C##EMY',
+        'PASSWORD': 'emyponcas',
+        'HOST': 'localhost',
+        'PORT': '1521',
     }
 }
+
 
 
 # Password validation
@@ -108,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'  # Para GMT+2 (ajusta según tu zona exacta)
 
 USE_I18N = True
 
@@ -131,3 +136,18 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+##USUARIOS DEL SISTEMA
+AUTH_USER_MODEL = 'titoPicantitoRestaurant.Usuario'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
+
+##CLOUDINARY GESTION DE IMAGENES
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dr9rdtmjy",
+    api_key="838643631837599",
+    api_secret="_L7Sbr0_GSitDIQYG3_BXZrAB1w",
+)

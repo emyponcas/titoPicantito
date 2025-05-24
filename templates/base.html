@@ -6,10 +6,11 @@
     <title>{% block title %}Tito Picantito{% endblock %}</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="icon" type="image/x-icon" href="{% static 'img/icon-tito-picantito.ico' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/all.min.css' %}"> <!-- Trabajan desde local -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
-    <!-- Navbar común -->
+    <!-- Navbar -->
     <nav class="nav-bar">
         <div class="logo-tito">
             <img src="{% static 'img/tito-picantito-logo-texto-lateral-removebg-preview.png' %}">
@@ -21,15 +22,166 @@
             <a class="boton-navbar" href="{% url 'conocenos' %}">Conoce a Tito</a>
             <a class="boton-navbar-filled">Pedir</a>
             <a class="boton-navbar-filled">Uber Eats</a>
-            <a class="boton-navbar">
-                <img src="{% static 'img/icon-usuario-white.png' %}">
-            </a>
+
+            <!-- Menú desplegable del usuario -->
+            <div class="dropdown usuario-dropdown">
+                <button class="dropdown-toggle boton-navbar">
+                    <img src="{% static 'img/icon-usuario-white.png' %}">
+                </button>
+                <div class="dropdown-menu">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown-header">
+                            Hola, {{ user.nombre|default:user.email|truncatechars:20 }}
+                        </div>
+                        {% if user.is_authenticated and user.rol == 'admin' %}
+                            <a href="{% url 'lista_usuarios_admin' %}" class="dropdown-item">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i> Análisis del mes
+                            </a>
+                        {% endif %}
+                        <a href="#" class="dropdown-item">
+                            <i class="fa-regular fa-user"></i> Mi Perfil
+                        </a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'añadir_producto' %}" class="dropdown-item">
+                                <i class="fa-regular fa-plus"></i> Añadir Producto
+                            </a>
+                        {% endif %}
+                        {% if user.is_authenticated and user.rol == 'admin' %}
+                            <a href="{% url 'lista_productos_admin' %}" class="dropdown-item">
+                                <i class="fa-solid fa-utensils"></i> Gestión Productos
+                            </a>
+                        {% endif %}
+                        {% if user.is_authenticated and user.rol == 'admin' %}
+                            <a href="{% url 'lista_usuarios_admin' %}" class="dropdown-item">
+                                <i class="fa-solid fa-users"></i> Gestión de Usuarios
+                            </a>
+                        {% endif %}
+                        {% if user.is_authenticated and user.rol == 'admin' or user.rol == 'camarero' %}
+                            <a href="{% url 'gestion_mesas' %}" class="dropdown-item">
+                                <i class="fa-solid fa-bell-concierge"></i> Gestión de Mesas
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'vista_cocina' %}" class="dropdown-item">
+                            <i class="fa-solid fa-fire-burner"></i> Ir a Cocina
+                        </a>
+                        <a href="{% url 'vista_barra' %}" class="dropdown-item">
+                            <i class="fa-solid fa-martini-glass-citrus"></i> Ir a Barra
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fa-solid fa-globe"></i> Pedir Online
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fa-solid fa-bag-shopping"></i> Mis Pedidos
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item">
+                            <i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="dropdown-item">
+                            <i class="fa-solid fa-door-open"></i> Iniciar Sesión
+                        </a>
+                        <a href="{% url 'registro' %}" class="dropdown-item">
+                            <i class="fa-solid fa-user-plus"></i> Registrarse
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
 
     <!-- Bloque de contenido que cambia -->
     {% block content %}
     {% endblock %}
+    
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    
+    <footer class="restaurant-footer">
+    <div class="footer-container">
+        <!-- Sección 1: Contacto y Horario -->
+        <div class="footer-section">
+            <h3 class="footer-title">Contacto</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <a href="https://maps.google.com/?q=Calle Calatrava, 41002, Sevilla" target="_blank" class="contact-link">Calle Calatrava, 41002, Sevilla</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+34654121243" class="contact-link">+34 654 12 12 43</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:emyponcas04@gmail.com" class="contact-link">emyponcas04@gmail.com</a>
+                </div>
+            </div>
+            <div class="opening-hours">
+                <h4 class="hours-title">Horario</h4>
+                <p>De Lunes a domingo</p>
+                <p>13:30 - 17:30</p>
+                <p>20:30 - 00:30</p>
+            </div>
+        </div>
+
+        <!-- Sección 2: Enlaces rápidos -->
+        <div class="footer-section">
+            <h3 class="footer-title">Enlaces Rápidos</h3>
+            <ul class="footer-links">
+                <li><a href="/menu" class="footer-link">Nuestro Menú</a></li>
+                <li><a href="/reservas" class="footer-link">Reservas Online</a></li>
+                <li><a href="/nosotros" class="footer-link">Sobre Nosotros</a></li>
+                <li><a href="/faq" class="footer-link">Preguntas Frecuentes</a></li>
+                <li><a href="/privacidad" class="footer-link">Política de Privacidad</a></li>
+                <li><a href="/terminos" class="footer-link">Términos de Uso</a></li>
+            </ul>
+        </div>
+
+        <!-- Sección 3: Newsletter -->
+        <div class="footer-section">
+            <h3 class="footer-title">Newsletter</h3>
+            <p class="newsletter-text">Suscríbete para recibir promociones y novedades</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Tu correo electrónico" required class="newsletter-input">
+                <button type="submit" class="newsletter-btn">Suscribirse</button>
+            </form>
+            <div class="social-media">
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <div class="hashtags">#TitoPicantito #EnSevillaMaravilla</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección inferior: Pagos, reviews y copyright -->
+    <div class="footer-bottom">
+        <div class="payment-methods">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-paypal"></i>
+            <i class="fab fa-cc-apple-pay"></i>
+        </div>
+        
+        <div class="reviews">
+            <span>Valóranos en:</span>
+            <a href="#" class="review-link"><i class="fab fa-tripadvisor"></i> TripAdvisor</a>
+            <a href="#" class="review-link"><i class="fab fa-google"></i> Google</a>
+            <a href="#" class="review-link"><i class="fas fa-star"></i> Yelp</a>
+        </div>
+        
+        <div class="copyright">
+            &copy; <span id="current-year"></span> TitoPicantito. Todos los derechos reservados.
+        </div>
+    </div>
+    </footer>
+    
 
     <script>
         function toggleMenu() {
@@ -41,6 +193,134 @@
     <script>
       AOS.init();
     </script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
 
 </body>
+
+<style>
+    /* Estilos específicos para el dropdown de usuario */
+    .usuario-dropdown {
+        margin-left: auto; /* Empuja el dropdown a la derecha */
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 10px;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: #000;
+        min-width: 220px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        z-index: 1000;
+        border: 1px solid green;
+        border-radius: 3px;
+        padding: 5px 0;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        animation: fadeIn 0.3s;
+    }
+
+    .dropdown-header {
+        padding: 8px 16px;
+        color: green;
+        font-weight: bold;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dropdown-item {
+        color: white;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+
+    .dropdown-item i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .dropdown-item:hover {
+        background-color: green;
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background-color: #333;
+        margin: 5px 0;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilos para móvil */
+    @media (max-width: 768px) {
+        .usuario-dropdown {
+            margin-left: 0;
+        }
+
+        .dropdown-menu {
+            right: auto;
+            left: 0;
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    // Para móvil: alternar menú al hacer clic
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.querySelector('.usuario-dropdown');
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = dropdown.classList.contains('active');
+
+                // Cerrar todos los dropdowns primero
+                document.querySelectorAll('.dropdown.active').forEach(d => {
+                    if (d !== dropdown) d.classList.remove('active');
+                });
+
+                // Alternar el actual
+                dropdown.classList.toggle('active', !isOpen);
+            }
+        });
+
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+</script>
 </html>
+
+

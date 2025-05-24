@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-cocina">
+    <h1 class="titulo-principal">Historial de Barra</h1>
+    <div class="boton-volver">
+        <a href="{% url 'vista_barra' %}" class="btn-volver">← Volver a Barra</a>
+    </div>
+
+    <div class="pedidos-wrapper">
+        <!-- Historial de Mesa -->
+        <div class="columna-pedidos">
+            <h2 class="titulo-seccion">Pedidos de Mesa</h2>
+            {% if lineas_mesa %}
+                {% for linea in lineas_mesa %}
+                <div class="card-pedido">
+                    <div class="card-header mesa">
+                        Mesa {{ linea.pedido.mesa.numero }} - {{ linea.pedido.get_estado_display }}
+                    </div>
+                    <div class="card-body">
+                        <p class="hora-pedido">Hora preparado: {{ linea.pedido.fecha_creacion|time:"H:i" }}</p>
+                        <p><strong>{{ linea.cantidad }}x {{ linea.producto.nombre }}</strong></p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alerta-vacia">No hay productos preparados en pedidos de mesa</div>
+            {% endif %}
+        </div>
+
+        <!-- Historial de Online -->
+        <div class="columna-pedidos">
+            <h2 class="titulo-seccion">Pedidos Online</h2>
+            {% if lineas_online %}
+                {% for linea in lineas_online %}
+                <div class="card-pedido">
+                    <div class="card-header online">
+                        Pedido #{{ linea.pedido.id }} - {{ linea.pedido.usuario.nombre }}
+                    </div>
+                    <div class="card-body">
+                        <p class="hora-pedido">Hora preparado: {{ linea.pedido.fecha_creacion|time:"H:i" }}</p>
+                        <p><strong>{{ linea.cantidad }}x {{ linea.producto.nombre }}</strong></p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alerta-vacia">No hay productos preparados en pedidos online</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+/* Estilos heredados de cocina/barra */
+
+.container-cocina {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.titulo-principal {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #b22222;
+}
+
+.titulo-seccion {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.pedidos-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.columna-pedidos {
+    flex: 1 1 45%;
+}
+
+.card-pedido {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header.mesa {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-header.online {
+    background-color: #ffc107;
+    color: black;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.hora-pedido {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.alerta-vacia {
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #555;
+    text-align: center;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .pedidos-wrapper {
+        flex-direction: column;
+    }
+    .columna-pedidos {
+        flex: 1 1 100%;
+    }
+}
+</style>
+{% endblock %}

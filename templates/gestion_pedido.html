@@ -1,0 +1,548 @@
+{% extends 'base_camarero.html' %}
+{% block content %}
+<div class="pedido-container">
+    <div class="pedido-header">
+        <h1><i class="fas fa-utensils"></i> Mesa {{ mesa.numero }}</h1>
+        <div class="pedido-status {% if pedido.estado == 'PENDIENTE' %}pendiente{% elif pedido.estado == 'EN_PREPARACION' %}preparacion{% else %}servido{% endif %}">
+            {{ pedido.get_estado_display }}
+        </div>
+    </div>
+    
+    <div class="pedido-info">
+        <p><i class="fas fa-users"></i> Comensales: {{ pedido.num_comensales }}</p>
+        <p><i class="fas fa-user-tie"></i> Camarero: {{ pedido.camarero.nombre }}</p>
+        {% if pedido.notas %}
+        <p><i class="fas fa-sticky-note"></i> Notas: {{ pedido.notas }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="seccion-productos">
+        <h2><i class="fas fa-plus-circle"></i> Añadir Productos</h2>
+        
+        <div class="filtros-categoria">
+            <button class="btn-categoria active" data-categoria="BEBIDA">Bebidas</button>
+            <button class="btn-categoria" data-categoria="ENTRANTE">Entrantes</button>
+            <button class="btn-categoria" data-categoria="PRINCIPAL">Principales</button>
+            <button class="btn-categoria" data-categoria="POSTRE">Postres</button>
+        </div>
+        
+        <div class="productos-grid">
+            {% for producto in productos %}
+            <div class="producto-card" data-categoria="{{ producto.tipo }}" onclick="agregarProducto({{ producto.id }})">
+                <div class="producto-img">
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                    {% else %}
+                    <div class="no-image"><i class="fas fa-utensils"></i></div>
+                    {% endif %}
+                </div>
+                <div class="producto-info">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p class="precio">{{ producto.precio }} €</p>
+                    {% if producto.nivel_picante > 0 %}
+                    <div class="picante">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= producto.nivel_picante %}
+                            <i class="fas fa-pepper-hot"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="pedido-actual">
+        <h2><i class="fas fa-receipt"></i> Pedido Actual</h2>
+        
+        <div class="lineas-pedido">
+            {% for linea in pedido.lineas_pedido.all %}
+            <div class="linea-pedido">
+                <div class="linea-info">
+                    <span class="cantidad">{{ linea.cantidad }}x</span>
+                    <span class="nombre">{{ linea.producto.nombre }}</span>
+                    <span class="subtotal">{{ linea.subtotal }} €</span>
+                </div>
+                <a href="{% url 'eliminar_linea_pedido' linea.id %}" class="eliminar-linea">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="total-pedido">
+            <h3>Total: <span>{{ pedido.total }} €</span></h3>
+            {% if pedido.num_comensales > 1 %}
+            <h4>Por persona: <span>{{ pedido.total_por_persona|floatformat:2 }} €</span></h4>
+            {% endif %}
+        </div>
+        
+        <div class="botones-accion">
+            <a href="{% url 'gestion_mesas' %}" class="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver a Mesas
+            </a>
+            <a href="{% url 'cerrar_pedido' pedido.id %}" class="btn-cerrar">
+                <i class="fas fa-cash-register"></i> Cerrar Pedido
+            </a>
+            <button class="btn-guardar" onclick="guardarYEnviar()">
+                <i class="fas fa-save"></i> Guardar y Salir
+            </button>
+        </div>
+    </div>
+</div>
+
+<form id="form-agregar-producto" method="post" action="{% url 'gestion_pedido_mesa' mesa.id %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="id_producto_id" name="producto_id">
+    <input type="hidden" id="id_cantidad" name="cantidad" value="1">
+</form>
+
+<script>
+    // Filtrado por categoría
+    document.querySelectorAll('.btn-categoria').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Actualizar botones activos
+            document.querySelectorAll('.btn-categoria').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filtrar productos
+            const categoria = this.dataset.categoria;
+            document.querySelectorAll('.producto-card').forEach(card => {
+                if (categoria === 'TODOS' || card.dataset.categoria === categoria) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Mostrar solo bebidas al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.producto-card').forEach(card => {
+            if (card.dataset.categoria !== 'BEBIDA') {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Añadir producto (1 unidad sin confirmación)
+    function agregarProducto(productoId) {
+        document.getElementById("id_producto_id").value = productoId;
+        document.getElementById("form-agregar-producto").submit();
+    }
+
+    // Guardar y enviar a cocina/barra
+    function guardarYEnviar() {
+        window.location.href = "{% url 'gestion_mesas' %}";
+    }
+</script>
+
+<style>
+    .pedido-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 20px;
+        color: #ffffff;
+        background-color: #000000;
+        min-height: 100vh;
+    }
+    
+    .pedido-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+    }
+    
+    .pedido-header h1 {
+        color: #00a800;
+        margin: 0;
+        font-size: 28px;
+    }
+    
+    .pedido-status {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: white;
+    }
+    
+    .pedido-status.pendiente {
+        background-color: #ffcc00;
+        color: #000000;
+    }
+    
+    .pedido-status.preparacion {
+        background-color: #0066cc;
+    }
+    
+    .pedido-status.servido {
+        background-color: #00a800;
+    }
+    
+    .pedido-info {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .pedido-info p {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        color: #ffffff;
+    }
+    
+    .pedido-info i {
+        color: #00a800;
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .seccion-productos {
+        margin-bottom: 30px;
+    }
+    
+    .seccion-productos h2 {
+        color: #00a800;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .seccion-productos h2 i {
+        margin-right: 10px;
+    }
+    
+    .filtros-categoria {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-categoria {
+        padding: 10px 20px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid #00a800;
+        color: #ffffff;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    .btn-categoria:hover {
+        background-color: rgba(0, 100, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .btn-categoria.active {
+        background-color: #00a800;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 168, 0, 0.3);
+    }
+    
+    .productos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .producto-card {
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid #00a800;
+        border-radius: 10px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .producto-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 255, 0, 0.2);
+        border-color: #00dd00;
+    }
+    
+    .producto-img {
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: rgba(0, 50, 0, 0.2);
+    }
+    
+    .producto-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .producto-card:hover .producto-img img {
+        transform: scale(1.05);
+    }
+    
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 100, 0, 0.1);
+        color: #00a800;
+        font-size: 40px;
+    }
+    
+    .producto-info h3 {
+        color: #ffffff;
+        font-size: 16px;
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .precio {
+        color: #00a800;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+    
+    .picante {
+        color: #ff4500;
+        font-size: 14px;
+    }
+    
+    .pedido-actual {
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #00a800;
+        border-radius: 10px;
+        padding: 20px;
+        position: sticky;
+        top: 20px;
+    }
+    
+    .pedido-actual h2 {
+        color: #00a800;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .pedido-actual h2 i {
+        margin-right: 10px;
+    }
+    
+    .lineas-pedido {
+        margin: 20px 0;
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+    
+    .lineas-pedido::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .lineas-pedido::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+    
+    .lineas-pedido::-webkit-scrollbar-thumb {
+        background-color: #00a800;
+        border-radius: 10px;
+    }
+    
+    .linea-pedido {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+    }
+    
+    .linea-info {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+    
+    .cantidad {
+        color: #00a800;
+        margin-right: 10px;
+        font-weight: bold;
+        min-width: 30px;
+    }
+    
+    .nombre {
+        color: #ffffff;
+        flex-grow: 1;
+    }
+    
+    .subtotal {
+        color: #ffffff;
+        margin-left: 15px;
+        font-weight: bold;
+        min-width: 70px;
+        text-align: right;
+    }
+    
+    .eliminar-linea {
+        color: #ff3333;
+        margin-left: 15px;
+        transition: all 0.3s;
+        font-size: 16px;
+    }
+    
+    .eliminar-linea:hover {
+        color: #ff6b7f;
+        transform: scale(1.2);
+    }
+    
+    .total-pedido {
+        border-top: 2px solid #00a800;
+        padding-top: 20px;
+        margin: 25px 0;
+    }
+    
+    .total-pedido h3 {
+        color: #ffffff;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .total-pedido h4 {
+        color: #aaaaaa;
+        font-size: 16px;
+        margin-top: 8px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .botones-accion {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-volver, .btn-cerrar, .btn-guardar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        text-decoration: none;
+        font-size: 14px;
+        color: white;
+    }
+    
+    .btn-volver {
+        background-color: #6c757d;
+    }
+    
+    .btn-volver:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-cerrar {
+        background-color: #ff3333;
+    }
+    
+    .btn-cerrar:hover {
+        background-color: #cc0000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+    }
+    
+    .btn-guardar {
+        background-color: #17a2b8;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-guardar:hover {
+        background-color: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 162, 184, 0.3);
+    }
+    
+    .botones-accion i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+    
+    @media (min-width: 992px) {
+        .pedido-container {
+            grid-template-columns: 2fr 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .productos-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        }
+        
+        .pedido-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .productos-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .filtros-categoria {
+            gap: 8px;
+        }
+        
+        .btn-categoria {
+            padding: 8px 12px;
+            font-size: 11px;
+        }
+        
+        .producto-card {
+            padding: 12px;
+        }
+        
+        .producto-img {
+            height: 120px;
+        }
+    }
+</style>
+{% endblock %}

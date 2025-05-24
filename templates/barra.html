@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-cocina">
+    <h1 class="titulo-principal">Pedidos para Barra</h1>
+    <p class="hora-actual">Hora actual: {{ hora_actual|time:"H:i" }}</p>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'historial_barra' %}" class="btn-historial">Ver Historial</a>
+    </div>
+
+    <div class="pedidos-wrapper">
+        <!-- Pedidos de Mesa -->
+        <div class="columna-pedidos">
+            <h2 class="titulo-seccion">Pedidos de Mesa</h2>
+            {% for pedido in pedidos_mesa %}
+            <div class="card-pedido">
+                <div class="card-header mesa">
+                    Mesa {{ pedido.mesa.numero }} - {{ pedido.get_estado_display }}
+                </div>
+                <div class="card-body">
+                    <p class="hora-pedido">Hora: {{ pedido.fecha_creacion|time:"H:i" }}</p>
+                    <ul class="lista-productos">
+                        {% for linea in pedido.lineas_pedido.all %}
+                            {% if linea.producto.zona_preparacion == 'BARRA' and not linea.preparado %}
+                            <li class="producto-item">
+                                {{ linea.cantidad }}x {{ linea.producto.nombre }}
+                                <form method="post" action="{% url 'marcar_linea_barra_preparada' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="linea_id" value="{{ linea.id }}">
+                                    <input type="hidden" name="tipo" value="mesa">
+                                    <button type="submit" class="btn-preparado">Marcar Preparado</button>
+                                </form>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alerta-vacia">No hay pedidos de mesa con bebidas</div>
+            {% endfor %}
+        </div>
+
+        <!-- Pedidos Online -->
+        <div class="columna-pedidos">
+            <h2 class="titulo-seccion">Pedidos Online</h2>
+            {% for pedido in pedidos_online %}
+            <div class="card-pedido">
+                <div class="card-header online">
+                    Pedido #{{ pedido.id }} - {{ pedido.usuario.nombre }}
+                </div>
+                <div class="card-body">
+                    <p class="hora-pedido">Hora: {{ pedido.fecha_creacion|time:"H:i" }}</p>
+                    <ul class="lista-productos">
+                        {% for linea in pedido.lineas_pedido.all %}
+                            {% if linea.producto.zona_preparacion == 'BARRA' and not linea.preparado %}
+                            <li class="producto-item">
+                                {{ linea.cantidad }}x {{ linea.producto.nombre }}
+                                <form method="post" action="{% url 'marcar_linea_barra_preparada' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="linea_id" value="{{ linea.id }}">
+                                    <input type="hidden" name="tipo" value="online">
+                                    <button type="submit" class="btn-preparado">Marcar Preparado</button>
+                                </form>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alerta-vacia">No hay pedidos online con bebidas</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+
+.btn-historial {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-historial:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+}
+
+
+.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px auto;
+    width: 60%;
+}
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
+/* Contenedor general */
+.container-cocina {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Títulos */
+.titulo-principal {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #b22222;
+}
+
+.hora-actual {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.titulo-seccion {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Columnas */
+.pedidos-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.columna-pedidos {
+    flex: 1 1 45%;
+}
+
+/* Tarjetas */
+.card-pedido {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header.mesa {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-header.online {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-derecha {
+    background-color: #6c757d;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: white;
+}
+
+.badge-verde {
+    background-color: #28a745 !important;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+/* Productos */
+.lista-productos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.producto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-preparado {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-preparado:hover {
+    background-color: #218838;
+}
+
+/* Alertas */
+.alerta-vacia {
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .pedidos-wrapper {
+        flex-direction: column;
+    }
+    .columna-pedidos {
+        flex: 1 1 100%;
+    }
+    .titulo-seccion {
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}

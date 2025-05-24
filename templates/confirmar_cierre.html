@@ -1,0 +1,110 @@
+{% extends 'base_camarero.html' %}
+{% block content %}
+<div class="confirmar-cierre">
+    <h1><i class="fas fa-cash-register"></i> Cerrar Pedido</h1>
+    <p>Mesa: {{ pedido.mesa.numero }}</p>
+    
+    <div class="total-pedido">
+        <h2>Total del pedido: <span>{{ pedido.total }} €</span></h2>
+        {% if pedido.num_comensales > 1 %}
+        <h3>Por persona: <span>{{ pedido.total_por_persona|floatformat:2 }} €</span></h3>
+        {% endif %}
+    </div>
+    
+    <p class="advertencia">¿Está seguro que desea cerrar este pedido? Esta acción no se puede deshacer.</p>
+    
+    <form method="post" class="form-acciones">
+        {% csrf_token %}
+        <a href="{% url 'gestion_pedido_mesa' pedido.mesa.id %}" class="btn-cancelar">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+        <button type="submit" class="btn-confirmar">
+            <i class="fas fa-check"></i> Confirmar Cierre
+        </button>
+    </form>
+</div>
+
+<style>
+    .confirmar-cierre {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .confirmar-cierre h1 {
+        margin-bottom: 20px;
+        color: #00a800;
+    }
+    
+    .total-pedido {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #00a800;
+        margin: 30px 0;
+    }
+    
+    .total-pedido h2 {
+        color: #ffffff;
+        font-size: 24px;
+    }
+    
+    .total-pedido h3 {
+        color: #aaaaaa;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+    
+    .total-pedido span {
+        color: #00a800;
+    }
+    
+    .advertencia {
+        font-size: 18px;
+        margin: 20px 0;
+        color: #ffffff;
+    }
+    
+    .form-acciones {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .btn-cancelar, .btn-confirmar {
+        padding: 12px 25px;
+        border-radius: 5px;
+        transition: all 0.3s;
+        font-size: 16px;
+        color: white;
+    }
+    
+    .btn-cancelar {
+        background-color: #333333;
+    }
+    
+    .btn-cancelar:hover {
+        background-color: #444444;
+    }
+    
+    .btn-confirmar {
+        background-color: #ff3333;
+    }
+    
+    .btn-confirmar:hover {
+        background-color: #cc0000;
+    }
+    
+    @media (max-width: 576px) {
+        .form-acciones {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-cancelar, .btn-confirmar {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}

@@ -3,6 +3,9 @@
 {% block title %}Home | Restaurante Tito Picantito{% endblock %}
 
 {% block content %}
+    
+    {{ products }}
+    
     <div id="video-tito" class="video-container">
         <video autoplay muted loop disablepictureinpicture>
             <source src="{% static 'img/video-expositor-titopicantito.mp4' %}" type="video/mp4">

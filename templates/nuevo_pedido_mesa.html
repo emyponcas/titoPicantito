@@ -1,0 +1,126 @@
+{% extends 'base_camarero.html' %}
+{% block content %}
+<div class="nuevo-pedido">
+    <h1><i class="fas fa-plus-circle"></i> Nuevo Pedido</h1>
+    <p>Mesa: {{ mesa.numero }}</p>
+    
+    <form method="post" class="pedido-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.num_comensales.id_for_label }}">
+                <i class="fas fa-users"></i> Número de Comensales
+            </label>
+            {{ form.num_comensales }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.notas.id_for_label }}">
+                <i class="fas fa-sticky-note"></i> Notas Especiales
+            </label>
+            {{ form.notas }}
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'gestion_mesas' %}" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+            <button type="submit" class="btn-confirmar">
+                <i class="fas fa-check"></i> Abrir Mesa
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .nuevo-pedido {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .nuevo-pedido h1 {
+        color: #00a800;
+    }
+    
+    .nuevo-pedido p {
+        color: #ffffff;
+    }
+    
+    .pedido-form {
+        margin-top: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #00a800;
+        font-size: 18px;
+    }
+    
+    .pedido-form input,
+    .pedido-form textarea {
+        width: 100%;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid #00a800;
+        border-radius: 5px;
+        color: #ffffff;
+        font-size: 16px;
+    }
+    
+    .pedido-form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .pedido-form input:focus,
+    .pedido-form textarea:focus {
+        outline: none;
+        border-color: #00aa00;
+        box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.2);
+    }
+    
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .btn-cancelar, .btn-confirmar {
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.3s;
+        color: white;
+    }
+    
+    .btn-cancelar {
+        background-color: #333333;
+    }
+    
+    .btn-cancelar:hover {
+        background-color: #444444;
+    }
+    
+    .btn-confirmar {
+        background-color: #00a800;
+    }
+    
+    .btn-confirmar:hover {
+        background-color: #008000;
+    }
+    
+    @media (max-width: 576px) {
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn-cancelar, .btn-confirmar {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
