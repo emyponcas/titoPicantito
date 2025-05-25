@@ -21,7 +21,7 @@
             <a class="boton-navbar" href="{% url 'carta' %}">Carta</a>
             <a class="boton-navbar" href="{% url 'conocenos' %}">Conoce a Tito</a>
             <a class="boton-navbar-filled">Pedir</a>
-            <a class="boton-navbar-filled">Uber Eats</a>
+            <a href="https://www.ubereats.com/" class="boton-navbar-filled">Uber Eats</a>
 
             <!-- Menú desplegable del usuario -->
             <div class="dropdown usuario-dropdown">
@@ -33,11 +33,6 @@
                         <div class="dropdown-header">
                             Hola, {{ user.nombre|default:user.email|truncatechars:20 }}
                         </div>
-                        {% if user.is_authenticated and user.rol == 'admin' %}
-                            <a href="{% url 'lista_usuarios_admin' %}" class="dropdown-item">
-                                <i class="fa-solid fa-magnifying-glass-chart"></i> Análisis del mes
-                            </a>
-                        {% endif %}
                         <a href="#" class="dropdown-item">
                             <i class="fa-regular fa-user"></i> Mi Perfil
                         </a>
@@ -67,10 +62,10 @@
                         <a href="{% url 'vista_barra' %}" class="dropdown-item">
                             <i class="fa-solid fa-martini-glass-citrus"></i> Ir a Barra
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="{% url 'catalogo' %}" class="dropdown-item">
                             <i class="fa-solid fa-globe"></i> Pedir Online
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="{% url 'historial_pedidos' %}" class="dropdown-item">
                             <i class="fa-solid fa-bag-shopping"></i> Mis Pedidos
                         </a>
                         <div class="dropdown-divider"></div>

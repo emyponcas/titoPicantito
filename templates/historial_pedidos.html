@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/all.min.css' %}">
+    <title>Mis Pedidos</title>
+</head>
+<body>
+    <header>
+        <h1>Mis Pedidos</h1>
+        <nav>
+            <a href="{% url 'home' %}">Inicio</a>
+            <a href="{% url 'catalogo' %}">Volver al catálogo</a>
+            <a href="{% url 'carrito' %}"><i class="fa-solid fa-cart-shopping"></i> Carrito</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="pedidos-container">
+            <section class="pedidos-pendientes">
+                <h2>Pedidos Pendientes</h2>
+                {% if pedidos_pendientes %}
+                    {% for pedido in pedidos_pendientes %}
+                        <div class="pedido-card">
+                            <div class="pedido-header">
+                                <h3>Pedido #{{ pedido.id }}</h3>
+                                <span class="estado {{ pedido.estado|lower }}">{{ pedido.get_estado_display }}</span>
+                            </div>
+                            <p class="fecha">Fecha: {{ pedido.fecha_creacion }}</p>
+                            <p class="total">Total: €{{ pedido.total }}</p>
+
+                            <div class="productos-pedido">
+                                <h4>Productos:</h4>
+                                <ul>
+                                    {% for linea in pedido.lineas.all %}
+                                        <li>{{ linea.cantidad }}x {{ linea.producto.nombre }} - €{{ linea.subtotal }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No tienes pedidos pendientes</p>
+                {% endif %}
+            </section>
+
+            <section class="pedidos-completados">
+                <h2>Pedidos Completados</h2>
+                {% if pedidos_completados %}
+                    {% for pedido in pedidos_completados %}
+                        <div class="pedido-card">
+                            <div class="pedido-header">
+                                <h3>Pedido #{{ pedido.id }}</h3>
+                                <span class="estado {{ pedido.estado|lower }}">{{ pedido.get_estado_display }}</span>
+                            </div>
+                            <p class="fecha">Fecha: {{ pedido.fecha_creacion }}</p>
+                            <p class="total">Total: €{{ pedido.total }}</p>
+
+                            <div class="productos-pedido">
+                                <h4>Productos:</h4>
+                                <ul>
+                                    {% for linea in pedido.lineas.all %}
+                                        <li>{{ linea.cantidad }}x {{ linea.producto.nombre }} - €{{ linea.subtotal }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No tienes pedidos completados</p>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin-bottom: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: green;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .pedidos-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            color: darkgreen;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pedido-card {
+            background: #f9f9f9;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid darkgreen    ;
+        }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pedido-header h3 {
+            color: darkgreen;
+        }
+
+        .estado {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .estado.pendiente, .estado.en_preparacion {
+            background-color: #FFA500;
+            color: white;
+        }
+
+        .estado.listo {
+            background-color: #008000;
+            color: white;
+        }
+
+        .fecha, .total {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .productos-pedido {
+            margin-top: 1rem;
+        }
+
+        .productos-pedido h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .productos-pedido ul {
+            list-style-type: none;
+        }
+
+        .productos-pedido li {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        @media (min-width: 768px) {
+            .pedidos-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

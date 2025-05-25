@@ -9,6 +9,9 @@ from django.utils import timezone
 from django.db.models import Count, Sum, Prefetch
 from django.http import HttpResponseNotAllowed
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+import json
+from decimal import Decimal
 
 
 # Create your views here.
@@ -692,3 +695,198 @@ def historial_logins_usuario(request, usuario_id):
         'usuario': usuario,
         'logins': logins
     })
+
+##pedidos online
+@login_required
+def catalogo_productos(request):
+    # Filtrar solo productos disponibles y que aparecen en carta
+    productos = Producto.objects.filter(disponible=True, aparece_en_carta=True)
+
+    # Organizar por categorías
+    categorias = {
+        'Bebidas': productos.filter(tipo='BEBIDA'),
+        'Entrantes': productos.filter(tipo='ENTRANTE'),
+        'Platos principales': productos.filter(tipo='PRINCIPAL'),
+        'Postres': productos.filter(tipo='POSTRE'),
+    }
+
+    # Obtener el carrito de la sesión
+    carrito = request.session.get('carrito', {})
+    total_items = sum(item['cantidad'] for item in carrito.values())
+
+    return render(request, 'catalogo.html', {
+        'categorias': categorias,
+        'total_items': total_items
+    })
+
+
+@login_required
+def ver_carrito(request):
+    carrito = request.session.get('carrito', {})
+    productos_ids = carrito.keys()
+    productos = Producto.objects.filter(id__in=productos_ids)
+
+    items_carrito = []
+    total = Decimal('0.00')
+
+    for producto in productos:
+        item = carrito[str(producto.id)]
+        subtotal = Decimal(item['precio']) * Decimal(item['cantidad'])
+        total += subtotal
+        items_carrito.append({
+            'producto': producto,
+            'cantidad': item['cantidad'],
+            'subtotal': subtotal
+        })
+
+    return render(request, 'carrito.html', {
+        'items': items_carrito,
+        'total': total
+    })
+
+
+@login_required
+@login_required
+def checkout(request):
+    if request.method == 'POST':
+        try:
+            carrito = request.session.get('carrito', {})
+            if not carrito:
+                return redirect('catalogo')
+
+            # Crear el pedido sin ID para que Oracle asigne uno automáticamente
+            pedido = PedidoOnline(
+                usuario=request.user,
+                estado='PENDIENTE',
+                total=Decimal('0.00'),
+                fecha_creacion=timezone.now()
+            )
+            pedido.save()  # Esto debería asignar un ID automático
+
+            total_pedido = Decimal('0.00')
+
+            for producto_id, item in carrito.items():
+                producto = Producto.objects.get(id=producto_id)
+                subtotal = Decimal(item['precio']) * Decimal(item['cantidad'])
+                total_pedido += subtotal
+
+                LineaPedidoOnline.objects.create(
+                    pedido=pedido,
+                    producto=producto,
+                    cantidad=item['cantidad'],
+                    precio_unidad=item['precio'],
+                    subtotal=subtotal
+                )
+
+            # Actualizar el total después de crear todas las líneas
+            pedido.total = total_pedido
+            pedido.save()
+
+            # Limpiar carrito
+            request.session['carrito'] = {}
+
+            return render(request, 'pago_exitoso.html', {'pedido': pedido})
+
+        except Exception as e:
+            # Manejo de errores mejorado
+            print(f"Error durante el checkout: {str(e)}")
+            messages.error(request, f"Error al procesar el pedido: {str(e)}")
+            return redirect('carrito')
+
+    return redirect('carrito')
+
+
+@login_required
+def historial_pedidos(request):
+    pedidos = PedidoOnline.objects.filter(usuario=request.user).order_by('-fecha_creacion')
+
+    # Separar en entregados y pendientes
+    pedidos_pendientes = pedidos.filter(estado__in=['PENDIENTE', 'EN_PREPARACION'])
+    pedidos_completados = pedidos.filter(estado='LISTO')
+
+    return render(request, 'historial_pedidos.html', {
+        'pedidos_pendientes': pedidos_pendientes,
+        'pedidos_completados': pedidos_completados
+    })
+
+
+# Vistas para manejar el carrito con AJAX
+@login_required
+@csrf_exempt
+def agregar_al_carrito(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        producto_id = str(data.get('producto_id'))
+        cantidad = int(data.get('cantidad', 1))
+
+        carrito = request.session.get('carrito', {})
+
+        producto = get_object_or_404(Producto, id=producto_id)
+
+        if producto_id in carrito:
+            carrito[producto_id]['cantidad'] += cantidad
+        else:
+            carrito[producto_id] = {
+                'cantidad': cantidad,
+                'precio': str(producto.precio),
+                'nombre': producto.nombre
+            }
+
+        request.session['carrito'] = carrito
+        total_items = sum(item['cantidad'] for item in carrito.values())
+
+        return JsonResponse({
+            'success': True,
+            'total_items': total_items
+        })
+
+    return JsonResponse({'success': False})
+
+
+@login_required
+@csrf_exempt
+def actualizar_carrito(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        producto_id = str(data.get('producto_id'))
+        cantidad = int(data.get('cantidad', 1))
+
+        carrito = request.session.get('carrito', {})
+
+        if producto_id in carrito:
+            if cantidad <= 0:
+                del carrito[producto_id]
+            else:
+                carrito[producto_id]['cantidad'] = cantidad
+
+            request.session['carrito'] = carrito
+            total_items = sum(item['cantidad'] for item in carrito.values())
+
+            return JsonResponse({
+                'success': True,
+                'total_items': total_items
+            })
+
+    return JsonResponse({'success': False})
+
+
+@login_required
+@csrf_exempt
+def eliminar_del_carrito(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        producto_id = str(data.get('producto_id'))
+
+        carrito = request.session.get('carrito', {})
+
+        if producto_id in carrito:
+            del carrito[producto_id]
+            request.session['carrito'] = carrito
+            total_items = sum(item['cantidad'] for item in carrito.values())
+
+            return JsonResponse({
+                'success': True,
+                'total_items': total_items
+            })
+
+    return JsonResponse({'success': False})

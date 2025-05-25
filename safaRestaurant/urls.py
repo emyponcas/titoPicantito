@@ -36,6 +36,13 @@ urlpatterns = [
     path('barra/', vista_barra, name='vista_barra'),
     path('barra/historial/', historial_barra, name='historial_barra'),
     path('barra/marcar_linea_preparada/', marcar_linea_barra_preparada, name='marcar_linea_barra_preparada'),
+    path('catalogo/', catalogo_productos, name='catalogo'),
+    path('carrito/', ver_carrito, name='carrito'),
+    path('checkout/', checkout, name='checkout'),
+    path('historial-pedidos/', historial_pedidos, name='historial_pedidos'),
+    path('agregar-carrito/', agregar_al_carrito, name='agregar_carrito'),
+    path('actualizar-carrito/', actualizar_carrito, name='actualizar_carrito'),
+    path('eliminar-carrito/', eliminar_del_carrito, name='eliminar_carrito'),
 
 
 

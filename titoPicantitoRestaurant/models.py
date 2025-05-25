@@ -240,6 +240,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         BARTENDER = 'bartender', 'Bartender'
         CLIENTE = 'cliente', 'Cliente'
 
+    imagen = imagen = CloudinaryField('image', blank=True, null=True)
     nombre = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=150)
     fecha_nacimiento = models.DateField()

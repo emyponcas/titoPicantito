@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Exitoso</title>
+</head>
+<body>
+    <header>
+        <h1>¡Pedido Realizado con Éxito!</h1>
+        <nav>
+            <a href="{% url 'home' %}">Inicio</a>
+            <a href="{% url 'historial_pedidos' %}">Mis Pedidos</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="confirmacion-pedido">
+            <h2>Gracias por tu pedido #{{ pedido.id }}</h2>
+            <p>Hemos recibido tu pedido correctamente. El total de tu compra fue de €{{ pedido.total }}.</p>
+            <p>Puedes ver el estado de tu pedido en la sección de <a href="{% url 'historial_pedidos' %}">mis pedidos</a>.</p>
+
+            <div class="acciones">
+                <button onclick="window.location.href='{% url 'catalogo' %}'">Volver al menú</button>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin-bottom: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: green;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .confirmacion-pedido {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .confirmacion-pedido h2 {
+            color: darkgreen;
+            margin-bottom: 1rem;
+        }
+
+        .confirmacion-pedido p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .confirmacion-pedido a {
+            color: darkgreen;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .confirmacion-pedido a:hover {
+            text-decoration: underline;
+        }
+
+        .acciones {
+            margin-top: 2rem;
+        }
+
+        button {
+            background-color: darkgreen;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: green;
+        }
+    </style>
+</body>
+</html>
