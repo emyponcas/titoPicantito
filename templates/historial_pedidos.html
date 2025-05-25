@@ -34,8 +34,10 @@
                             <div class="productos-pedido">
                                 <h4>Productos:</h4>
                                 <ul>
-                                    {% for linea in pedido.lineas.all %}
+                                    {% for linea in pedido.lineas_pedido.all %}
                                         <li>{{ linea.cantidad }}x {{ linea.producto.nombre }} - €{{ linea.subtotal }}</li>
+                                    {% empty %}
+                                        <li>No hay productos en este pedido</li>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -61,8 +63,10 @@
                             <div class="productos-pedido">
                                 <h4>Productos:</h4>
                                 <ul>
-                                    {% for linea in pedido.lineas.all %}
+                                    {% for linea in pedido.lineas_pedido.all %}
                                         <li>{{ linea.cantidad }}x {{ linea.producto.nombre }} - €{{ linea.subtotal }}</li>
+                                    {% empty %}
+                                        <li>No hay productos en este pedido</li>
                                     {% endfor %}
                                 </ul>
                             </div>

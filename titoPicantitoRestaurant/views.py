@@ -436,6 +436,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import LineaPedidoMesa, LineaPedidoOnline
 
+
 @login_required
 @user_passes_test(es_cocinero_o_admin)
 @require_POST
@@ -456,17 +457,34 @@ def marcar_linea_preparada(request):
         linea.save()
 
         pedido = linea.pedido
-        todas_preparadas = not pedido.lineas_pedido.filter(
-            producto__zona_preparacion='COCINA',
-            preparado=False
-        ).exists()
+
+        # Verificar si TODAS las líneas del pedido están preparadas (tanto cocina como barra)
+        todas_preparadas = not pedido.lineas_pedido.filter(preparado=False).exists()
 
         if todas_preparadas:
-            pedido.estado = 'SERVIDO' if tipo == 'mesa' else 'LISTO'
+            if tipo == 'mesa':
+                pedido.estado = 'SERVIDO'
+                messages.success(request, f"Pedido de mesa {pedido.mesa.numero} está completamente preparado.")
+            else:
+                pedido.estado = 'LISTO'
+                messages.success(request, f"Pedido online {pedido.id} está completamente preparado.")
             pedido.save()
-            messages.success(request, f"Pedido {'de mesa' if tipo == 'mesa' else 'online'} {pedido.id} está listo.")
         else:
-            messages.success(request, f"Línea marcada como preparada correctamente.")
+            # Verificar si todas las líneas de COCINA están preparadas
+            cocina_preparada = not pedido.lineas_pedido.filter(
+                producto__zona_preparacion='COCINA',
+                preparado=False
+            ).exists()
+
+            if cocina_preparada:
+                if tipo == 'mesa':
+                    messages.success(request,
+                                     f"Todos los productos de cocina para mesa {pedido.mesa.numero} están preparados. Esperando bebidas.")
+                else:
+                    messages.success(request,
+                                     f"Todos los productos de cocina para pedido online {pedido.id} están preparados. Esperando bebidas.")
+            else:
+                messages.success(request, "Línea marcada como preparada correctamente.")
 
     except Exception as e:
         messages.error(request, f"Error al marcar la línea: {e}")
@@ -663,25 +681,53 @@ def marcar_linea_barra_preparada(request):
 
     linea.preparado = True
     linea.save()
-    messages.success(request, 'Producto marcado como preparado.')
+
+    pedido = linea.pedido
+
+    # Verificar si TODAS las líneas del pedido están preparadas
+    todas_preparadas = not pedido.lineas_pedido.filter(preparado=False).exists()
+
+    if todas_preparadas:
+        if tipo == 'mesa':
+            pedido.estado = 'SERVIDO'
+            messages.success(request,
+                             f'Todos los productos para mesa {pedido.mesa.numero} están preparados. Pedido listo para servir.')
+        else:
+            pedido.estado = 'LISTO'
+            messages.success(request,
+                             f'Todos los productos para pedido online {pedido.id} están preparados. Pedido listo.')
+        pedido.save()
+    else:
+        # Verificar si todas las líneas de BARRA están preparadas
+        barra_preparada = not pedido.lineas_pedido.filter(
+            producto__zona_preparacion='BARRA',
+            preparado=False
+        ).exists()
+
+        if barra_preparada:
+            messages.success(request, 'Todos los productos de barra están preparados. Esperando comida.')
+        else:
+            messages.success(request, 'Producto marcado como preparado.')
 
     return redirect('vista_barra')
-
 
 @login_required
 @user_passes_test(es_bartender_o_admin)
 def historial_barra(request):
     lineas_mesa = LineaPedidoMesa.objects.filter(
-        producto__zona_preparacion='BARRA', preparado=True
+        producto__zona_preparacion='BARRA',
+        preparado=True
     ).order_by('-id')[:50]
 
     lineas_online = LineaPedidoOnline.objects.filter(
-        producto__zona_preparacion='BARRA', preparado=True
+        producto__zona_preparacion='BARRA',
+        preparado=True
     ).order_by('-id')[:50]
 
     return render(request, 'barra_historial.html', {
         'lineas_mesa': lineas_mesa,
         'lineas_online': lineas_online,
+        'hora_actual': timezone.now()
     })
 
 
@@ -798,9 +844,11 @@ def checkout(request):
 
 @login_required
 def historial_pedidos(request):
-    pedidos = PedidoOnline.objects.filter(usuario=request.user).order_by('-fecha_creacion')
+    # Usa el related_name correcto 'lineas_pedido' que definiste en el modelo
+    pedidos = PedidoOnline.objects.filter(usuario=request.user).order_by('-fecha_creacion').prefetch_related(
+        Prefetch('lineas_pedido', queryset=LineaPedidoOnline.objects.select_related('producto'))
+    )
 
-    # Separar en entregados y pendientes
     pedidos_pendientes = pedidos.filter(estado__in=['PENDIENTE', 'EN_PREPARACION'])
     pedidos_completados = pedidos.filter(estado='LISTO')
 
