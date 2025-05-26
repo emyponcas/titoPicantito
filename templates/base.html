@@ -20,7 +20,7 @@
             <a class="boton-navbar" href="{% url 'home' %}">Inicio</a>
             <a class="boton-navbar" href="{% url 'carta' %}">Carta</a>
             <a class="boton-navbar" href="{% url 'conocenos' %}">Conoce a Tito</a>
-            <a class="boton-navbar-filled">Pedir</a>
+            <a href="{% url 'catalogo' %}"class="boton-navbar-filled">Pedir</a>
             <a href="https://www.ubereats.com/" class="boton-navbar-filled">Uber Eats</a>
 
             <!-- Menú desplegable del usuario -->
@@ -33,7 +33,7 @@
                         <div class="dropdown-header">
                             Hola, {{ user.nombre|default:user.email|truncatechars:20 }}
                         </div>
-                        <a href="#" class="dropdown-item">
+                        <a href="{% url 'profile' %}" class="dropdown-item">
                             <i class="fa-regular fa-user"></i> Mi Perfil
                         </a>
                         {% if user.is_staff %}

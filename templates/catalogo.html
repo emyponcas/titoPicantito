@@ -27,6 +27,11 @@
                         {% for producto in productos %}
                             <div class="producto-card">
                                 <h3>{{ producto.nombre }}</h3>
+                                {% if producto.imagen %}
+                                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-imagen">
+                                {% else %}
+                                    <div class="sin-imagen">Sin imagen</div>
+                                {% endif %}
                                 <p>{{ producto.descripcion }}</p>
                                 <p class="precio">€{{ producto.precio }}</p>
                                 <div class="acciones">
@@ -65,11 +70,13 @@
     </script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: "Bebas Neue", sans-serif;
         }
 
         body {
@@ -138,6 +145,8 @@
             padding: 1.5rem;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .producto-card:hover {
@@ -148,6 +157,26 @@
         .producto-card h3 {
             color: black;
             margin-bottom: 0.5rem;
+        }
+
+        .producto-imagen {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+        }
+
+        .sin-imagen {
+            width: 100%;
+            height: 180px;
+            background-color: #f0f0f0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+            color: #777;
         }
 
         .precio {
@@ -165,6 +194,7 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: auto;
         }
 
         button:hover {
@@ -179,6 +209,10 @@
             nav {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            .producto-imagen {
+                height: 150px;
             }
         }
     </style>

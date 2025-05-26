@@ -43,6 +43,7 @@ urlpatterns = [
     path('agregar-carrito/', agregar_al_carrito, name='agregar_carrito'),
     path('actualizar-carrito/', actualizar_carrito, name='actualizar_carrito'),
     path('eliminar-carrito/', eliminar_del_carrito, name='eliminar_carrito'),
+    path('profile/', profile, name='profile'),
 
 
 

@@ -115,3 +115,25 @@ class PedidoMesaForm(forms.ModelForm):
 class LineaPedidoForm(forms.Form):
     producto_id = forms.IntegerField(widget=forms.HiddenInput())
     cantidad = forms.IntegerField(min_value=1, initial=1, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
+##FORMULARIO DEL PERFIL USUARIO
+
+class UsuarioUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = [
+            'imagen',
+            'nombre',
+            'apellidos',
+            'fecha_nacimiento',
+            'email',
+            'telefono'
+        ]
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hacer que el email sea de solo lectura
+        self.fields['email'].disabled = True

@@ -938,3 +938,27 @@ def eliminar_del_carrito(request):
             })
 
     return JsonResponse({'success': False})
+
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UsuarioUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=request.user
+        )
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado!')
+            return redirect('profile')
+    else:
+        form = UsuarioUpdateForm(instance=request.user)
+
+    context = {
+        'form': form,
+        'usuario': request.user
+    }
+
+    return render(request, 'profile.html', context)
