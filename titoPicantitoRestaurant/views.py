@@ -14,7 +14,22 @@ import json
 from decimal import Decimal
 
 
-# Create your views here.
+##DECORADORES
+def es_camarero_o_admin(user):
+    return user.rol in [Usuario.Rol.CAMARERO, Usuario.Rol.ADMIN, Usuario.Rol.ENCARGADO]
+def es_cocinero_o_admin(user):
+    return user.rol in [Usuario.Rol.COCINERO, Usuario.Rol.ADMIN, Usuario.Rol.ENCARGADO]
+def es_bartender_o_admin(user):
+    return user.rol in [Usuario.Rol.BARTENDER, Usuario.Rol.ADMIN, Usuario.Rol.ENCARGADO]
+
+##GESTION DE ERRORES
+def error_403(request, exception=None):
+    return render(request, '403.html', status=403)
+
+def error_404(request, exception=None):
+    return render(request, '404.html', status=404)
+
+
 
 def go_home(request):
     return render(request, 'home.html')
@@ -78,7 +93,7 @@ def go_login(request):
 
     return render(request, 'login.html', {'form': form})
 
-
+@login_required
 def go_logout(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión correctamente. ¡Vuelve pronto!')
@@ -192,11 +207,6 @@ def toggle_usuario_activo(request, usuario_id):
 
 
 ##GESTION DE PEDIDOS MESA
-
-def es_camarero_o_admin(user):
-    return user.rol in [Usuario.Rol.CAMARERO, Usuario.Rol.ADMIN]
-
-
 @login_required
 @user_passes_test(es_camarero_o_admin)
 def gestion_mesas(request):
@@ -335,11 +345,6 @@ def eliminar_linea_pedido(request, linea_id):
 
 
 ##COCINA
-
-def es_cocinero_o_admin(user):
-    return user.rol in [Usuario.Rol.COCINERO, Usuario.Rol.ADMIN, Usuario.Rol.ENCARGADO]
-
-
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 
@@ -641,10 +646,6 @@ def gestion_pedido_mesa(request, mesa_id):
     })
 
 ##BARRA
-
-def es_bartender_o_admin(user):
-    return user.is_authenticated and (user.rol == 'BARTENDER' or user.is_superuser)
-
 @login_required
 @user_passes_test(es_bartender_o_admin)  # Crea este helper si no existe
 def vista_barra(request):

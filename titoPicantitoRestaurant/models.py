@@ -145,6 +145,10 @@ class PedidoMesa(models.Model):
             self.estado = 'SERVIDO'
         self.save()
 
+    @property
+    def total_por_persona(self):
+        return self.total / self.num_comensales if self.num_comensales > 0 else 0
+
 class PedidoOnline(models.Model):
     class EstadoPedido(models.TextChoices):
         PENDIENTE = 'PENDIENTE', 'Pendiente'

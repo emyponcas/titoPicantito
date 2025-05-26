@@ -22,8 +22,7 @@ class RegistroFormulario(forms.ModelForm):
             'fecha_nacimiento',
             'email',
             'telefono',
-            'rol',
-            'password'
+            'password'  # Eliminamos 'rol' de los campos del formulario
         ]
         widgets = {
             'nombre': forms.TextInput(attrs={
@@ -46,9 +45,6 @@ class RegistroFormulario(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Número de teléfono'
             }),
-            'rol': forms.Select(attrs={
-                'class': 'form-control'
-            }),
         }
         help_texts = {
             'email': 'Introduce una dirección de correo electrónico válida.',
@@ -59,9 +55,23 @@ class RegistroFormulario(forms.ModelForm):
             },
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        #si lo necesito que en algunos casos se pueda seleccionar el rol,
+        # puedo hacerlo condicionalmente
+        if 'initial' in kwargs and 'rol' in kwargs['initial']:
+            self.fields['rol'] = forms.ChoiceField(
+                choices=Usuario.Rol.choices,
+                widget=forms.Select(attrs={'class': 'form-control'}),
+                initial=kwargs['initial']['rol']
+            )
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
+        #establecer el rol por defecto como CLIENTE si no se especifica
+        if not hasattr(user, 'rol') or not user.rol:
+            user.rol = Usuario.Rol.CLIENTE
         if commit:
             user.save()
         return user

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-eb-8@3fbv5ekpxx_0ayf@v@+w_(w8*t7%47$+43vktfb9d=2ze
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -142,6 +142,10 @@ AUTH_USER_MODEL = 'titoPicantitoRestaurant.Usuario'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
+
+##GESTION DE ERRORES
+handler403 = 'titoPicantitoRestaurant.views.error_403'
+handler404 = 'titoPicantitoRestaurant.views.error_404'
 
 ##USUARIO
 MEDIA_URL = '/media/'

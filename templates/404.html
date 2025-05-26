@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error 404 - Ruta no encontrada.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <main class="container">
+        <img src="{% static 'img/tito-picantito-logo-texto-lateral-removebg-preview.png' %}" alt="Tito Picantito Logo" class="logo">
+        <h1>Error 404</h1>
+        <p>Ruta no encontrada, sigue jugando...</p>
+        <a href="{% url 'home' %}" class="boton">Volver al inicio</a>
+    </main>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('static/img/fondo_picante.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 90%;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #32cd32;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #32cd32;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .boton:hover {
+            background-color: #28a428;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+
+            .logo {
+                width: 90px;
+            }
+        }
+    </style>
+</body>
+</html>
