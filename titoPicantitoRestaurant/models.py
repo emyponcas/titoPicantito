@@ -234,6 +234,17 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+##RESENAS
+class Resena(models.Model):
+    puntuacion = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comentario = models.TextField()
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'resena'
+
+    def __str__(self):
+        return self.comentario
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     class Rol(models.TextChoices):
@@ -259,6 +270,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     fecha_alta = models.DateTimeField(null=True, blank=True)
     fecha_modificacion = models.DateTimeField(null=True, blank=True)
+    resenas = models.ManyToManyField(
+        Resena,
+        through='ResenaUsuario',
+        blank=True,
+    )
 
     objects = CustomUserManager()
 
@@ -285,6 +301,17 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
                 self.is_staff = False
 
         super().save(*args, **kwargs)
+
+class ResenaUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    resena = models.ForeignKey(Resena, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'resena_usuario'
+        unique_together = ('resena', 'usuario')
+
+    def __str__(self):
+        return f"{self.resena.comentario} - {self.usuario.nombre}"
 
 ##CREAR EL HISTORIAL DE LOGINS
 

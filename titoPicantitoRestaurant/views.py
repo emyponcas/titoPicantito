@@ -963,3 +963,52 @@ def profile(request):
     }
 
     return render(request, 'profile.html', context)
+
+##RESENAS
+@login_required
+def crear_resena(request):
+    if request.method == 'POST':
+        puntuacion = request.POST.get('puntuacion')
+        comentario = request.POST.get('comentario')
+
+        if puntuacion and comentario:
+            resena = Resena.objects.create(
+                puntuacion=puntuacion,
+                comentario=comentario
+            )
+            ResenaUsuario.objects.create(
+                usuario=request.user,
+                resena=resena
+            )
+            return redirect('mis_resenas')
+
+    return render(request, 'crear_resena.html')
+
+
+@login_required
+def mis_resenas(request):
+    resenas_usuario = ResenaUsuario.objects.filter(usuario=request.user).select_related('resena')
+    resenas = [ru.resena for ru in resenas_usuario]
+    return render(request, 'mis_resenas.html', {'resenas': resenas})
+
+@login_required
+def eliminar_resena(request, id):
+    resena = get_object_or_404(Resena, id=id, usuario=request.user)
+    resena.delete()
+    return redirect('mis_resenas')
+
+
+@login_required
+def editar_resena(request, id):
+    resena = get_object_or_404(Resena, id=id, usuario=request.user)
+
+    if request.method == 'POST':
+        form = ResenaForm(request.POST, instance=resena)
+        if form.is_valid():
+            form.save()
+            return redirect('mis_resenas')
+    else:
+        form = ResenaForm(instance=resena)
+
+    return render(request, 'editar_reseña.html', {'form': form})
+

@@ -147,3 +147,10 @@ class UsuarioUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Hacer que el email sea de solo lectura
         self.fields['email'].disabled = True
+
+##formulario crear resena
+
+class ResenaForm(forms.ModelForm):
+    class Meta:
+        model = Resena
+        fields = ['puntuacion', 'comentario', 'fecha_creacion']

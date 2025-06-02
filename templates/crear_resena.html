@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Reseña</title>
+</head>
+<body>
+    <h1>Crear Nueva Reseña</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="puntuacion">Puntuación (0-5):</label>
+            <input type="number" id="puntuacion" name="puntuacion" min="0" max="5" required>
+        </div>
+        <div>
+            <label for="comentario">Comentario:</label>
+            <textarea id="comentario" name="comentario" required></textarea>
+        </div>
+        <button type="submit">Enviar Reseña</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Reseñas</title>
+</head>
+<body>
+    <h1>Mis Reseñas</h1>
+    
+    {% for resena in resenas %}
+    <div class="resena-card">
+        <p><strong>Puntuacion:</strong> {{ resena.puntuacion }}/5</p>
+        <p>{{ resena.comentario }}</p>
+        <small>{{ resena.fecha_creacion }}</small>
+        
+        <div class="resena-actions">
+            <a href="{% url 'editar_resena' resena.id %}" class="btn-editar">Editar</a>
+            <form action="{% url 'eliminar_resena' resena.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

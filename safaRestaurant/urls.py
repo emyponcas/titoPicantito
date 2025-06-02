@@ -44,6 +44,10 @@ urlpatterns = [
     path('actualizar-carrito/', actualizar_carrito, name='actualizar_carrito'),
     path('eliminar-carrito/', eliminar_del_carrito, name='eliminar_carrito'),
     path('profile/', profile, name='profile'),
+    path('crear_resena/', crear_resena, name='crear_resena'),
+    path('mis_resenas/', mis_resenas, name='mis_resenas'),
+    path('editar-resena/<int:id>/', editar_resena, name='editar_resena'),
+    path('eliminar-resena/<int:id>/', eliminar_resena, name='eliminar_resena'),
 
 
 

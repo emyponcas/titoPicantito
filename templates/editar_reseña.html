@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Reseña</title>
+</head>
+<body>
+    <h1>Editar Reseña</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'mis_resenas' %}">Cancelar</a>
+    </form>
+</body>
+</html>
