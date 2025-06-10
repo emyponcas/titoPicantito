@@ -154,3 +154,11 @@ class ResenaForm(forms.ModelForm):
     class Meta:
         model = Resena
         fields = ['puntuacion', 'comentario', 'fecha_creacion']
+
+
+##FORM CREAR RESERVA
+
+class ReservaForm(forms.ModelForm):
+    class Meta:
+        model = ReservaMesa
+        fields = ['ncomensales', 'informacionMesa', 'fecha_reserva', 'fecha_creacion']

@@ -48,6 +48,10 @@ urlpatterns = [
     path('mis_resenas/', mis_resenas, name='mis_resenas'),
     path('editar-resena/<int:id>/', editar_resena, name='editar_resena'),
     path('eliminar-resena/<int:id>/', eliminar_resena, name='eliminar_resena'),
+    path('crear_reserva/', crear_reserva, name='crear_reserva'),
+    path('ver_tus_reservas/', ver_tus_reservas, name='ver_tus_reservas'),
+    path('editar-reserva/<int:id>/', editar_reserva, name='editar_reserva'),
+    path('eliminar-reserva/<int:id>/', eliminar_reserva, name='eliminar_reserva'),
 
 
 

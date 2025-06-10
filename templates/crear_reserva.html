@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hacer reserva de Mesa</title>
+</head>
+<body>
+    <h1>Crear nueva Reserva</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="ncomensales">Numero de comensales (0-8):</label>
+            <input type="number" id="ncomensales" name="ncomensales" min="0" max="8" required>
+        </div>
+        <div>
+            <label for="informacionMesa">Informacion acerca de la reserva:</label>
+            <textarea id="informacionMesa" name="informacionMesa" required></textarea>
+        </div>
+        <div>
+          <label for="fecha_reserva">Selecciona una fecha para tu reserva:</label>
+          <input type="datetime-local" name="fecha_reserva" min="{{ now|date:'Y-m-d\\TH:i' }}">
+        </div>
+        <button type="submit">Enviar Reseña</button>
+    </form>
+</body>
+</html>

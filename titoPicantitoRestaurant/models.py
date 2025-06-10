@@ -1,4 +1,7 @@
+from datetime import timezone
+
 from cloudinary.models import CloudinaryField
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
@@ -329,3 +332,29 @@ class HistorialLogin(models.Model):
 
     def __str__(self):
         return f"{self.usuario.email} - {self.fecha_login}"
+
+
+##CREAR RESERVAS DE MESAS
+
+class ReservaMesa(models.Model):
+    ncomensales = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    informacionMesa = models.TextField()
+    fecha_reserva = models.DateTimeField(null=True, blank=True)
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'reserva_mesa'
+
+    def __str__(self):
+        return self.informacionMesa
+
+class ReservaUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    reserva = models.ForeignKey(ReservaMesa, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'reserva_usuario'
+        unique_together = ('reserva', 'usuario')
+
+    def __str__(self):
+        return f"{self.reserva.informacionMesa} - {self.usuario.nombre}"

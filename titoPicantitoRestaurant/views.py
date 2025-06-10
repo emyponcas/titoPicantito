@@ -1012,3 +1012,55 @@ def editar_resena(request, id):
 
     return render(request, 'editar_reseña.html', {'form': form})
 
+##RESERVAS DE MESAS
+@login_required
+def crear_reserva(request):
+
+    if request.method == 'POST':
+        ncomensales = request.POST.get('ncomensales')
+        informacionMesa = request.POST.get('informacionMesa')
+        fecha_reserva = request.POST.get('fecha_reserva')
+
+        if ncomensales and informacionMesa and fecha_reserva:
+            reserva = ReservaMesa.objects.create(
+                ncomensales=ncomensales,
+                informacionMesa=informacionMesa,
+                fecha_reserva=fecha_reserva
+            )
+            ReservaUsuario.objects.create(
+                usuario=request.user,
+                reserva=reserva
+            )
+
+            return redirect('ver_tus_reservas')
+
+    return render(request, 'crear_reserva.html', {'now': timezone.now()})
+
+@login_required
+def ver_tus_reservas(request):
+    reserva_usuario = ReservaUsuario.objects.filter(usuario=request.user).select_related('reserva')
+    reservas = [ru.reserva for ru in reserva_usuario]
+    return render(request, 'ver_tus_reservas.html', {'reservas': reservas})
+
+@login_required
+def eliminar_reserva(request, id):
+    reserva = get_object_or_404(ReservaMesa, id=id, reservausuario__usuario=request.user)
+    reserva.delete()
+    return redirect('ver_tus_reservas')
+
+@login_required
+def editar_reserva(request, id):
+    reserva = get_object_or_404(ReservaMesa, id=id, reservausuario__usuario=request.user)
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST, instance=reserva)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_tus_reservas')
+    else:
+        form = ReservaForm(instance=reserva)
+
+    return render(request, 'editar_reserva.html', {'form': form})
+
+
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Reservas de mesa</title>
+</head>
+<body>
+    <h1>Mis Reservas</h1>
+    
+    {% for reserva in reservas %}
+    <div class="resena-card">
+        <p><strong>Nº Comensales:</strong> {{ reserva.ncomensales }}/8</p>
+        <p>{{ reserva.informacionMesa }}</p>
+        <p>Fecha de tu reserva: {{ reserva.fecha_reserva }}</p>
+        <p>Fecha de creación: {{ reserva.fecha_creacion }}</p>
+        
+        <div class="resena-actions">
+            <a href="{% url 'editar_reserva' reserva.id %}" class="btn-editar">Editar</a>
+            <form action="{% url 'eliminar_reserva' reserva.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <a href="/">Volver al inicio</a>
+</body>
+</html>
