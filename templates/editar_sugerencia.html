@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Sugerencia</title>
+</head>
+<body>
+    <h1>Editar Sugerencia</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'ver_tus_sugerencias' %}">Cancelar</a>
+    </form>
+</body>
+</html>

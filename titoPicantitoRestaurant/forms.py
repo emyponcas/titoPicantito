@@ -162,3 +162,15 @@ class ReservaForm(forms.ModelForm):
     class Meta:
         model = ReservaMesa
         fields = ['ncomensales', 'informacionMesa', 'fecha_reserva', 'fecha_creacion']
+
+class SugerenciaForm(forms.ModelForm):
+    class Meta:
+        model = Sugerencia
+        fields = ['titulo', 'tipo_sugerencia', 'comentario', 'fecha_creacion']
+
+##SOLICITUDES EMPLEO
+
+class SolicitudForm(forms.ModelForm):
+    class Meta:
+        model = Solicitud
+        fields = ['puesto', 'comentario', 'fecha_creacion']

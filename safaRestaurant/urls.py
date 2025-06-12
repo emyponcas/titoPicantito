@@ -52,6 +52,14 @@ urlpatterns = [
     path('ver_tus_reservas/', ver_tus_reservas, name='ver_tus_reservas'),
     path('editar-reserva/<int:id>/', editar_reserva, name='editar_reserva'),
     path('eliminar-reserva/<int:id>/', eliminar_reserva, name='eliminar_reserva'),
+    path('crear_sugerencia/', crear_sugerencia, name='crear_sugerencia'),
+    path('ver_tus_sugerencias/', ver_tus_sugerencias, name='ver_tus_sugerencias'),
+    path('editar-sugerencia/<int:id>/', editar_sugerencia, name='editar_sugerencia'),
+    path('eliminar-sugerencia/<int:id>/', eliminar_sugerencia, name='eliminar_sugerencia'),
+    path('crear_solicitud/', crear_solicitud, name='crear_solicitud'),
+    path('ver_tus_solicitudes/', ver_tus_solicitudes, name='ver_tus_solicitudes'),
+    path('editar-solicitud/<int:id>/', editar_solicitud, name='editar_solicitud'),
+    path('eliminar-solicitud/<int:id>/', eliminar_solicitud, name='eliminar_solicitud'),
 
 
 

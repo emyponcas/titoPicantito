@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hacer una solicitud de empleo</title>
+</head>
+<body>
+    <h1>Crear nueva Solicitud</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="puesto">Puesto de trabajo que solicita:</label>
+            <select id="puesto" name="puesto" required>
+                <option value="" selected disabled>Seleccione un tipo</option>
+                <option value="CAMARERO">Camarero</option>
+                <option value="COCINERO">Cocinero</option>
+                <option value="GESTOR">Gestor</option>
+            </select>
+        </div>
+        <div>
+          <label for="comentario">Comentario:</label>
+          <textarea id="comentario" name="comentario" required></textarea>
+        </div>
+        <button type="submit">Enviar Solicitud de empleo</button>
+    </form>
+</body>
+</html>

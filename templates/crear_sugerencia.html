@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hacer sugerencia del restaurante</title>
+</head>
+<body>
+    <h1>Crear nueva Sugerencia</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="titulo">Título:</label>
+            <input type=text id="titulo" name="titulo" required>
+        </div>
+        <div>
+            <label for="tipo_sugerencia">Tipo de sugerencia:</label>
+            <select id="tipo_sugerencia" name="tipo_sugerencia" required>
+                <option value="" selected disabled>Seleccione un tipo</option>
+                <option value="LOCAL">Sugerencia local</option>
+                <option value="PEDIDOS">Sugerencia de pedidos</option>
+                <option value="PLATOS">Sugerencia de platos</option>
+            </select>
+        </div>
+        <div>
+          <label for="comentario">Comentario:</label>
+          <textarea id="comentario" name="comentario" required></textarea>
+        </div>
+        <button type="submit">Enviar Sugerencia</button>
+    </form>
+</body>
+</html>

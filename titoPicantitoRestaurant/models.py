@@ -358,3 +358,68 @@ class ReservaUsuario(models.Model):
 
     def __str__(self):
         return f"{self.reserva.informacionMesa} - {self.usuario.nombre}"
+
+##SUGERENCIAS
+class Sugerencia(models.Model):
+    class tipoSugerencia(models.TextChoices):
+        PLATOS = 'PLATOS', 'Platos'
+        LOCAL = 'LOCAL', 'Local'
+        PEDIDOS = 'PEDIDOS', 'Pedidos'
+
+    titulo = models.CharField(max_length=100)
+    tipo_sugerencia = models.CharField(
+        max_length=10,
+        choices=tipoSugerencia.choices,
+        default=tipoSugerencia.LOCAL,
+    )
+    comentario = models.TextField()
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'sugerencia'
+
+    def __str__(self):
+        return self.titulo
+
+class SugerenciaUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    sugerencia = models.ForeignKey(Sugerencia, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'sugerencia_usuario'
+        unique_together = ('sugerencia', 'usuario')
+
+    def __str__(self):
+        return f"{self.sugerencia.titulo} - {self.usuario.nombre}"
+
+##Solicitud de empleo Recuperación defensa
+class Solicitud(models.Model):
+    class puesto(models.TextChoices):
+        CAMARERO = 'CAMARERO', 'Camarero'
+        COCINERO = 'COCINERO', 'Cocinero'
+        Gestor = 'GESTOR', 'Gestor'
+
+    puesto = models.CharField(
+        max_length=10,
+        choices=puesto.choices,
+        default=puesto.CAMARERO,
+    )
+    comentario = models.TextField()
+    fecha_creacion = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'solicitud'
+
+    def __str__(self):
+        return self.puesto
+
+class SolicitudUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'solicitud_usuario'
+        unique_together = ('solicitud', 'usuario')
+
+    def __str__(self):
+        return f"{self.solicitud.puesto} - {self.usuario.nombre}"

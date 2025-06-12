@@ -1062,5 +1062,105 @@ def editar_reserva(request, id):
 
     return render(request, 'editar_reserva.html', {'form': form})
 
+##SUGERENCIAS
+@login_required
+def crear_sugerencia(request):
+
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        tipo_sugerencia = request.POST.get('tipo_sugerencia')
+        comentario = request.POST.get('comentario')
+
+        if titulo and tipo_sugerencia and comentario:
+            sugerencia = Sugerencia.objects.create(
+                titulo=titulo,
+                tipo_sugerencia=tipo_sugerencia,
+                comentario=comentario
+            )
+            SugerenciaUsuario.objects.create(
+                usuario=request.user,
+                sugerencia=sugerencia
+            )
+
+            return redirect('ver_tus_sugerencias')
+
+    return render(request, 'crear_sugerencia.html', {'now': timezone.now()})
+
+@login_required
+def ver_tus_sugerencias(request):
+    sugerencia_usuario = SugerenciaUsuario.objects.filter(usuario=request.user).select_related('sugerencia')
+    sugerencias = [su.sugerencia for su in sugerencia_usuario]
+    return render(request, 'ver_tus_sugerencias.html', {'sugerencias': sugerencias})
+
+@login_required
+def eliminar_sugerencia(request, id):
+    sugerencia = get_object_or_404(Sugerencia, id=id, sugerenciausuario__usuario=request.user)
+    sugerencia.delete()
+    return redirect('ver_tus_sugerencias')
+
+@login_required
+def editar_sugerencia(request, id):
+    sugerencia = get_object_or_404(Sugerencia, id=id, sugerenciausuario__usuario=request.user)
+
+    if request.method == 'POST':
+        form = SugerenciaForm(request.POST, instance=sugerencia)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_tus_sugerencias')
+    else:
+        form = SugerenciaForm(instance=sugerencia)
+
+    return render(request, 'editar_sugerencia.html', {'form': form})
+
+##Solicitudes de empleo Recuoerancion defensa
+@login_required
+def crear_solicitud(request):
+
+    if request.method == 'POST':
+        puesto = request.POST.get('puesto')
+        comentario = request.POST.get('comentario')
+
+        if puesto and comentario:
+            solicitud = Solicitud.objects.create(
+                puesto=puesto,
+                comentario=comentario
+            )
+            SolicitudUsuario.objects.create(
+                usuario=request.user,
+                solicitud=solicitud
+            )
+
+            return redirect('ver_tus_solicitudes')
+
+    return render(request, 'crear_solicitud.html', {'now': timezone.now()})
+
+def ver_tus_solicitudes(request):
+    solicitud_usuario = SolicitudUsuario.objects.filter(usuario=request.user).select_related('solicitud')
+    solicitudes = [sou.solicitud for sou in solicitud_usuario]
+    return render(request, 'ver_tus_solicitudes.html', {'solicitudes': solicitudes})
+
+
+
+@login_required
+def eliminar_solicitud(request, id):
+    solicitud = get_object_or_404(Solicitud, id=id, solicitudusuario__usuario=request.user)
+    solicitud.delete()
+    return redirect('ver_tus_solicitudes')
+
+@login_required
+def editar_solicitud(request, id):
+    solicitud = get_object_or_404(Solicitud, id=id, solicitudusuario__usuario=request.user)
+
+    if request.method == 'POST':
+        form = SolicitudForm(request.POST, instance=solicitud)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_tus_solicitudes')
+    else:
+        form = SolicitudForm(instance=solicitud)
+
+    return render(request, 'editar_solicitud.html', {'form': form})
+
+
 
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Sugerencias</title>
+</head>
+<body>
+    <h1>Mis Sugerencias</h1>
+    
+    {% for sugerencia in sugerencias %}
+    <div class="resena-card">
+        <p><strong>Titulo:</strong> {{ sugerencia.titulo }}</p>
+        <p>{{ sugerencia.tipo_sugerencia }}</p>
+        <p>Comentario: {{ sugerencia.comentario }}</p>
+        <p>Fecha de creación: {{ sugerencia.fecha_creacion }}</p>
+        
+        <div class="resena-actions">
+            <a href="{% url 'editar_sugerencia' sugerencia.id %}" class="btn-editar">Editar</a>
+            <form action="{% url 'eliminar_sugerencia' sugerencia.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

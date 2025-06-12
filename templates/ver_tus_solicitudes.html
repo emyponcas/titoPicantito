@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Solicitudes de empleo</title>
+</head>
+<body>
+    <h1>Mis Solicitudes</h1>
+    
+    {% for solicitud in solicitudes %}
+    <div class="resena-card">
+        <p>{{ solicitud.puesto }}</p>
+        <p>Comentario: {{ solicitud.comentario }}</p>
+        <p>Fecha de creación: {{ solicitud.fecha_creacion }}</p>
+        
+        <div class="resena-actions">
+            <a href="{% url 'editar_solicitud' solicitud.id %}" class="btn-editar">Editar</a>
+            <form action="{% url 'eliminar_solicitud' solicitud.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <a href="/">Volver al inicio</a>
+</body>
+</html>
